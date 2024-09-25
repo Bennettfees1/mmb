@@ -1,0 +1,82 @@
+---
+title: "ScripttoScrape"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(dplyr)
+```
+
+```{r}
+data <- read.csv("Rho0.8.csv", as.is = TRUE)
+```
+
+
+
+### Inflation
+```{r}
+inflationdata <- data %>%
+  filter(variable == "Inflation")
+```
+
+```{r}
+inflationoutput <- data.frame("Model Name" = as.character(0), "Model Rule" = as.character(0) ,"PeakInflation" = as.numeric(0), "Integral" = as.numeric(0), "TimeofPeak" = as.numeric(0))
+
+for(i in 1:nrow(inflationdata)){
+  rowdata <- inflationdata[i,]
+  x <- c(rowdata$X1, rowdata$X2, rowdata$X3, rowdata$X4, rowdata$X5,rowdata$X6,rowdata$X7,rowdata$X8,rowdata$X9,rowdata$X10,rowdata$X11,rowdata$X12,rowdata$X13,rowdata$X14,rowdata$X15,rowdata$X16,rowdata$X17,rowdata$X18,rowdata$X19,rowdata$X20,rowdata$X21)
+  temppeak <- max(abs(x))
+  tempintegral <- sum(abs(x))
+  tempindex <- which.max(abs(x)) - 1
+  temprow <- c(rowdata$model, rowdata$rule, temppeak, tempintegral, tempindex)
+  inflationoutput[i,] <- temprow
+}
+```
+
+### Output
+```{r}
+
+```
+
+
+
+```{r}
+outputdata <- data %>%
+  filter(variable == "Output Gap")
+```
+
+```{r}
+outputoutput <- data.frame("Model Name" = as.character(0), "Model Rule" = as.character(0) ,"PeakOutput" = as.numeric(0), "Integral" = as.numeric(0), "TimeofPeak" = as.numeric(0), "PropNegative")
+
+for(i in 1:nrow(inflationdata)){
+  rowdata <- outputdata[i,]
+  x <- c(rowdata$X1, rowdata$X2, rowdata$X3, rowdata$X4, rowdata$X5,rowdata$X6,rowdata$X7,rowdata$X8,rowdata$X9,rowdata$X10,rowdata$X11,rowdata$X12,rowdata$X13,rowdata$X14,rowdata$X15,rowdata$X16,rowdata$X17,rowdata$X18,rowdata$X19,rowdata$X20,rowdata$X21)
+  nonegative <- 0
+  for(j in 1:20){
+    if(x[j] < 0){
+      nonegative <- nonegative + 1
+    }
+  }
+  temppeak <- max(abs(x))
+  tempintegral <- sum(abs(x))
+  tempindex <- which.max(abs(x)) - 1
+  temprow <- c(rowdata$model, rowdata$rule, temppeak, tempintegral, tempindex, nonegative/20)
+  outputoutput[i,] <- temprow
+}
+```
+
+### Export to CSV
+```{r}
+write.csv(inflationoutput, "inflationdata.csv")
+write.csv(outputoutput, "outputdata.csv")
+
+
+```
+
+
+### Differences between rules 

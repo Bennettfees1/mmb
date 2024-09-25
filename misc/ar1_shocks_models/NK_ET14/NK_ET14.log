@@ -1,0 +1,72 @@
+Starting Dynare (version 4.5.6).
+Starting preprocessing of the model file ...
+Substitution of endo leads >= 2: added 9 auxiliary variables and equations.
+Substitution of endo lags >= 2: added 47 auxiliary variables and equations.
+Found 90 equation(s).
+Evaluating expressions...done
+Computing static model derivatives:
+ - order 1
+Computing dynamic model derivatives:
+ - order 1
+ - order 2
+Processing outputs ...
+done
+Preprocessing completed.
+[Warning: Some of the parameters have no value (vepsG) when using stoch_simul. If these parameters are not initialized in a steadystate file or a
+steady_state_model-block, Dynare may not be able to solve the model...] 
+{'delta' requires <a href="matlab:matlab.internal.addons.launchers.showExplorer('ErrorRecovery', 'identifier', 'RP', 'focused', 'delta');">RF PCB Toolbox</a>.
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('NK_ET14_steadystate', '/msu/scratch4/m1cmb07/Connor_bob/mmb/ar1_shocks_models/NK_ET14/NK_ET14_steadystate.m', 39)" style="font-weight:bold">NK_ET14_steadystate</a> (<a href="matlab: opentoline('/msu/scratch4/m1cmb07/Connor_bob/mmb/ar1_shocks_models/NK_ET14/NK_ET14_steadystate.m',39,0)">line 39</a>)
+          exp(theta)*phi/(exp(theta)-1)*(exp(D))^(psii)*(1-gbar)^delta*...
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('evaluate_steady_state_file', '/apps/dynare/4.5.6/lib/dynare/matlab/evaluate_steady_state_file.m', 52)" style="font-weight:bold">evaluate_steady_state_file</a> (<a href="matlab: opentoline('/apps/dynare/4.5.6/lib/dynare/matlab/evaluate_steady_state_file.m',52,0)">line 52</a>)
+    [ys,check] = h_steadystate(ys_init, exo_ss);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('evaluate_steady_state', '/apps/dynare/4.5.6/lib/dynare/matlab/evaluate_steady_state.m', 212)" style="font-weight:bold">evaluate_steady_state</a> (<a href="matlab: opentoline('/apps/dynare/4.5.6/lib/dynare/matlab/evaluate_steady_state.m',212,0)">line 212</a>)
+    [ys,params,info] = evaluate_steady_state_file(ys_init,exo_ss,M, options,steadystate_check_flag);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('resol', '/apps/dynare/4.5.6/lib/dynare/matlab/resol.m', 104)" style="font-weight:bold">resol</a> (<a href="matlab: opentoline('/apps/dynare/4.5.6/lib/dynare/matlab/resol.m',104,0)">line 104</a>)
+[dr.ys,M.params,info] = evaluate_steady_state(oo.steady_state,M,options,oo,~options.steadystate.nocheck);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('stoch_simul', '/apps/dynare/4.5.6/lib/dynare/matlab/stoch_simul.m', 89)" style="font-weight:bold">stoch_simul</a> (<a href="matlab: opentoline('/apps/dynare/4.5.6/lib/dynare/matlab/stoch_simul.m',89,0)">line 89</a>)
+    [oo_.dr,info,M_,options_,oo_] = resol(0,M_,options_,oo_);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('NK_ET14', '/msu/scratch4/m1cmb07/Connor_bob/mmb/ar1_shocks_models/NK_ET14/NK_ET14.m', 953)" style="font-weight:bold">NK_ET14</a> (<a href="matlab: opentoline('/msu/scratch4/m1cmb07/Connor_bob/mmb/ar1_shocks_models/NK_ET14/NK_ET14.m',953,0)">line 953</a>)
+info = stoch_simul(var_list_);
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('dynare', '/apps/dynare/4.5.6/lib/dynare/matlab/dynare.m', 235)" style="font-weight:bold">dynare</a> (<a href="matlab: opentoline('/apps/dynare/4.5.6/lib/dynare/matlab/dynare.m',235,0)">line 235</a>)
+evalin('base',fname) ;
+
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Run_Dynare_AR1_Shocks_Models', '/msu/scratch4/m1cmb07/Connor_bob/mmb/ar1_shocks_models/Run_Dynare_AR1_Shocks_Models.m', 16)" style="font-weight:bold">Run_Dynare_AR1_Shocks_Models</a> (<a href="matlab: opentoline('/msu/scratch4/m1cmb07/Connor_bob/mmb/ar1_shocks_models/Run_Dynare_AR1_Shocks_Models.m',16,0)">line 16</a>)
+    dynare NK_ET14.mod
+} 
+test
+
+Configuring Dynare ...
+[mex] Generalized QZ.
+[mex] Sylvester equation solution.
+[mex] Kronecker products.
+[mex] Sparse kronecker products.
+[mex] Local state space iteration (second order).
+[mex] Bytecode evaluation.
+[mex] k-order perturbation solver.
+[mex] k-order solution simulation.
+[mex] Quasi Monte-Carlo sequence (Sobol).
+[mex] Markov Switching SBVAR.
+
+Using 64-bit preprocessor
+Starting Dynare (version 4.5.6).
+Starting preprocessing of the model file ...
+Substitution of endo leads >= 2: added 9 auxiliary variables and equations.
+Substitution of endo lags >= 2: added 14 auxiliary variables and equations.
+Found 57 equation(s).
+Evaluating expressions...done
+Computing static model derivatives:
+ - order 1
+Computing dynamic model derivatives:
+ - order 1
+ - order 2
+Processing outputs ...
+done
+Preprocessing completed.
+

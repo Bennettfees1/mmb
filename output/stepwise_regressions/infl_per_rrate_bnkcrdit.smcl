@@ -1,0 +1,1577 @@
+{smcl}
+{txt}{sf}{ul off}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/msu/scratch4/m1cmb07/Connor_bob/mmb/output/stepwise_regressions/infl_per_rrate_bnkcrdit.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}18 Jul 2024, 14:15:45
+{txt}- forvalues i=20(20)60{c -(}
+- di "********************************************************************************"
+********************************************************************************
+- di "Interaction effects of `var' and rules on `depvar' at various horizons"
+= di "Interaction effects of bnkcrdit and rules on infl_per_rrate at various horizons"
+Interaction effects of bnkcrdit and rules on infl_per_rrate at various horizons
+- di "********************************************************************************"
+********************************************************************************
+- robreg m `depvar'`i' i.`var'##(i.rule_tr i.rule_itr i.rule_g), k(4.685) bis center updatescale
+= robreg m infl_per_rrate20 i.bnkcrdit##(i.rule_tr i.rule_itr i.rule_g), k(4.685) bis center updatescale
+  {hline 153} begin robreg {hline}
+  - version 11
+  - if replay() {c -(}
+    syntax [, all noHEADer NOTABle * ]
+    _get_diopts diopts options, `options'
+    _get_eformopts, eformopts(`options') allowed(__all__)
+    Display, `all' `header' `notable' `s(eform)' `diopts'
+    exit
+    {c )-}
+  - gettoken subcmd : 0, parse(", ")
+  - if `"`subcmd'"'=="predict" {c -(}
+  = if `"m"'=="predict" {c -(}
+    gettoken subcmd 0 : 0, parse(", ")
+    Predict `0'
+    exit
+    {c )-}
+  - if `"`subcmd'"'==substr("hausman", 1, max(4,strlen(`"`subcmd'"'))) {c -(}
+  = if `"m"'==substr("hausman", 1, max(4,strlen(`"m"'))) {c -(}
+    gettoken subcmd 0 : 0, parse(", ")
+    Hausman `0'
+    exit
+    {c )-}
+  - local cmdlist "ls q m s mm lms lts lqs"
+  - if !`:list subcmd in cmdlist' {c -(}
+  = if !1 {c -(}
+    di as err `"invalid subcommand: `subcmd'"'
+    exit 198
+    {c )-}
+  - if "`subcmd'"=="mm" {c -(}
+  = if "m"=="mm" {c -(}
+    _parse comma lhs rhs : 0
+    if `"`lhs'"'=="mm" {c -(}
+    ReEstimate_mm `rhs'
+    ereturn local cmdline `"robreg `0'"'
+    Display, `diopts'
+    exit
+    {c )-}
+    {c )-}
+  - local version : di "version " string(_caller()) ":"
+  - Check_vce `0'
+  = Check_vce m infl_per_rrate20 i.bnkcrdit##(i.rule_tr i.rule_itr i.rule_g), k(4.685) bis center updatescale
+    {hline 141} begin robreg.Check_vce {hline}
+    - _parse comma lhs 0 : 0
+    - syntax [, vce(str) NOSE UGENerate(passthru) * ]
+    - if `"`vce'"'=="" exit
+    = if `""'=="" exit
+    {hline 143} end robreg.Check_vce {hline}
+  - if "`hasvce'"!="" {c -(}
+  = if ""!="" {c -(}
+    `version' _vce_parserun robreg, noeqlist: `00'
+    ereturn local cmdline `"robreg `0'"'
+    exit
+    {c )-}
+  - Estimate `0'
+  = Estimate m infl_per_rrate20 i.bnkcrdit##(i.rule_tr i.rule_itr i.rule_g), k(4.685) bis center updatescale
+    {hline 142} begin robreg.Estimate {hline}
+    - gettoken subcmd 0 : 0, parse(", ")
+    - local refit = ("`subcmd'"=="_mm")
+    = local refit = ("m"=="_mm")
+    - if `refit' local subcmd "mm"
+    = if 0 local subcmd "mm"
+    - local notallowed y touse n xvars xvars0
+    - foreach opt of local notallowed {c -(}
+    - local notallowedopts notallowedopts `opt'(passthru)
+    = local notallowedopts notallowedopts y(passthru)
+    - {c )-}
+    - local notallowedopts notallowedopts `opt'(passthru)
+    = local notallowedopts notallowedopts touse(passthru)
+    - {c )-}
+    - local notallowedopts notallowedopts `opt'(passthru)
+    = local notallowedopts notallowedopts n(passthru)
+    - {c )-}
+    - local notallowedopts notallowedopts `opt'(passthru)
+    = local notallowedopts notallowedopts xvars(passthru)
+    - {c )-}
+    - local notallowedopts notallowedopts `opt'(passthru)
+    = local notallowedopts notallowedopts xvars0(passthru)
+    - {c )-}
+    - syntax varlist(fv ts) [if] [in] [pw fw iw] [, noCONStant nor2 Ivar(varname numeric) Absorb(varname numeric) UGENerate(name) NOUsave Usave replace vce(str) CLuster(varname) Ftest NOSE Level(passthru) all noHEADer NOTABle TOLerance(numlist >0 max=1) ITERate(integer `c(maxiter)') relax noquad nolog `notallowedopts' * ]
+    = syntax varlist(fv ts) [if] [in] [pw fw iw] [, noCONStant nor2 Ivar(varname numeric) Absorb(varname numeric) UGENerate(name) NOUsave Usave replace vce(str) CLuster(varname) Ftest NOSE Level(passthru) all noHEADer NOTABle TOLerance(numlist >0 max=1) ITERate(integer 300) relax noquad nolog notallowedopts xvars0(passthru) * ]
+{err}variable {bf}infl_per_rrate20{sf} not found
+{txt}    {hline 144} end robreg.Estimate {hline}
+  {hline 155} end robreg {hline}
+  display _n "{c -(}newpage{c )-}"
+  {c )-}
+  log close
+  translate ./output/stepwise_regressions/`depvar'_`var'.smcl ./output/stepwise_regressions/`depvar'_`var'.pdf, translator(smcl2pdf)
+  ! rm ./output/stepwise_regressions/`depvar'_`var'.smcl
+  {c )-}
+  {c )-}
+{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "/lcl/data/lscratch/SD106669.000000"
+{txt}
+{com}. graph close
+{txt}  {hline 154} begin graph {hline}
+  - if d(`=c(born_date)') < d(23Jul2004) {c -(}
+  = if d(15 Nov 2023) < d(23Jul2004) {c -(}
+    di as err "your Stata executable is out of date"
+    di as err "    type -update executable- at the Stata prompt"
+    exit 498
+    {c )-}
+  - local ver = string(_caller())
+  - if (_caller() < 8.2) version 8
+  - else if (_caller() < 10 ) version 8.2
+  - else version 10
+  - gdi record = yes
+  - gdi maybedraw = yes
+  - if "`._Gr_Global.isa'" == "" {c -(}
+  = if "class" == "" {c -(}
+    ._Gr_Global = .global_g.new
+    {c )-}
+  - ._Gr_Global.callerver = "`ver'"
+  = ._Gr_Global.callerver = "18"
+  - capture noisily Graph `0'
+  = capture noisily Graph close
+    {hline 146} begin graph.Graph {hline}
+    - if `"`0'"' == `""' {c -(}
+    = if `"close"' == `""' {c -(}
+      if `"`.__GRAPHCMD'"' != `""' {c -(}
+      local 0 `.__GRAPHCMD'
+      {c )-}
+      else {c -(}
+      di as error "no existing graph command to replay"
+      exit 198
+      {c )-}
+      {c )-}
+    - local orig_cmd `0'
+    = local orig_cmd close
+    - gettoken do 0 : 0, parse(" ,")
+    - local orig2 `"`0'"'
+    = local orig2 `""'
+    - local ldo = length("`do'")
+    = local ldo = length("close")
+    - if "`do'" == bsubstr("draw",1,max(4,`ldo')) {c -(}
+    = if "close" == bsubstr("draw",1,max(4,5)) {c -(}
+      gr_draw_replay `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("display",1,max(2,`ldo')) {c -(}
+    = if "close" == bsubstr("display",1,max(2,5)) {c -(}
+      gr_draw_replay `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("save",1,max(4,`ldo')) {c -(}
+    = if "close" == bsubstr("save",1,max(4,5)) {c -(}
+      gr_save `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("use",1,max(3,`ldo')) {c -(}
+    = if "close" == bsubstr("use",1,max(3,5)) {c -(}
+      gr_use `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("print",1,max(5,`ldo')) {c -(}
+    = if "close" == bsubstr("print",1,max(5,5)) {c -(}
+      gr_print `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("dir",1,max(3,`ldo')) {c -(}
+    = if "close" == bsubstr("dir",1,max(3,5)) {c -(}
+      gr_dir `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("describe",1,max(1,`ldo')) {c -(}
+    = if "close" == bsubstr("describe",1,max(1,5)) {c -(}
+      gr_describe `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("drop",1,max(4,`ldo')) {c -(}
+    = if "close" == bsubstr("drop",1,max(4,5)) {c -(}
+      gr_drop `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("close",1,max(5,`ldo')) {c -(}
+    = if "close" == bsubstr("close",1,max(5,5)) {c -(}
+    - gr_close `0'
+    = gr_close 
+      {hline 147} begin gr_close {hline}
+      - version 14
+      - local f0 `0'
+      = local f0 
+      - gettoken pattern : 0, parse(" ,")
+      - local npats = 0
+      - local potnamelist
+      - if `"`pattern'"' != "" & `"`pattern'"' != "," {c -(}
+      = if `""' != "" & `""' != "," {c -(}
+        local pattern1 `pattern'
+        local potnamelist `potnamelist' `pattern1'
+        local npats = 1
+        gettoken pattern 0 : 0, parse(" ,")
+        while `"`pattern'"' != "" & `"`pattern'"' != "," {c -(}
+        local npats = `npats' + 1
+        local pattern`npats' `pattern'
+        local potnamelist `potnamelist' `pattern`npats''
+        gettoken pattern 0 : 0, parse(" ,")
+        {c )-}
+        if "`pattern'" == "," {c -(}
+        local 0 , `0'
+        {c )-}
+        {c )-}
+      - else {c -(}
+      - local pattern1
+      - local potnamelist
+      - local npats = 1
+      - {c )-}
+      - local alllist _all
+      - local justall: list alllist == potnamelist
+      - capture confirm name `potnamelist'
+      = capture confirm name 
+      - local justnames = !_rc
+      - capture syntax
+      - local hasopts = _rc
+      - if "`potnamelist'" == "" & ! `hasopts' {c -(}
+      = if "" == "" & ! 0 {c -(}
+      - local justall 1
+      - local f0 _all
+      - {c )-}
+      - capture syntax
+      - if `justall' | `justnames' | `hasopts' {c -(}
+      = if 1 | 0 | 0 {c -(}
+      - gr_close_namelist `f0'
+      = gr_close_namelist _all
+        {hline 136} begin gr_close_namelist {hline}
+        - version 8
+        - syntax [ anything(name=grlist) ]
+        - local grlist : list uniq grlist
+        - if `"`grlist'"' == `"_all"' {c -(}
+        = if `"_all"' == `"_all"' {c -(}
+        - _gs_clean_graphlist
+          {hline 132} begin _gs_clean_graphlist {hline}
+          - foreach graph in `._Gr_Global.graphlist' {c -(}
+          = foreach graph in  IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules y_t_modvars y_t_modvars_rules {c -(}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules y_t_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules y_t_modvars y_t_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - ._Gr_Global.graphlist = "`list'"
+          = ._Gr_Global.graphlist = " IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules y_t_modvars y_t_modvars_rules"
+          {hline 134} end _gs_clean_graphlist {hline}
+        - local grlist `._Gr_Global.graphlist'
+        = local grlist  IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules y_t_modvars y_t_modvars_rules
+        - {c )-}
+        - foreach name of local grlist {c -(}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS20_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS20_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS20_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS20_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat20_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat20_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat20_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat20_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac20_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac20_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac20_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac20_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr20_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr20_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr20_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr20_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS40_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS40_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS40_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS40_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat40_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat40_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat40_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat40_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac40_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac40_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac40_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac40_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr40_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr40_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr40_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr40_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS60_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS60_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS60_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS60_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat60_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat60_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat60_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat60_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac60_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac60_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac60_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac60_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr60_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr60_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr60_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr60_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph piq_t_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph piq_t_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph piq_t_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph piq_t_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph y_t_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph y_t_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph y_t_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph y_t_modvars_rules
+        - {c )-}
+        - local curgraph "`._Gr_Global.current_graph_resync'"
+          {hline 122} begin global_g.current_graph_resync {hline}
+          - version 8
+          - if ("`gdi(topwindow)'" == "__BLANK") class exit ""
+          = if ("y_t_modvars_rules" == "__BLANK") class exit ""
+          - else if ("`gdi(topwindow)'" == "") class exit "`.current_graph'"
+          = else if ("y_t_modvars_rules" == "") class exit ""
+          - else {c -(}
+          - .current_graph = "`gdi(topwindow)'"
+          = .current_graph = "y_t_modvars_rules"
+          - class exit "`.current_graph'"
+          = class exit "y_t_modvars_rules"
+          {hline 124} end global_g.current_graph_resync {hline}
+        = local curgraph "y_t_modvars_rules"
+        - if 0`:list curgraph in grlist' {c -(}
+        = if 01 {c -(}
+        - ._Gr_Global.set_current_graph ""
+          {hline 125} begin global_g.set_current_graph {hline}
+          - version 8
+          - args graph
+          - .current_graph = "`graph'"
+          = .current_graph = ""
+          {hline 127} end global_g.set_current_graph {hline}
+        - {c )-}
+        {hline 138} end gr_close_namelist {hline}
+      - exit
+      {hline 149} end gr_close {hline}
+    - exit
+    {hline 148} end graph.Graph {hline}
+  - local rc = _rc
+  - gdi record = yes
+  - gdi maybedraw = yes
+  - gdi end
+  - exit `rc'
+  = exit 0
+  {hline 156} end graph {hline}
+
+{com}. set graphics off
+{txt}
+{com}. use .${c -(}cleandata{c )-}MMB_reg_format.dta, clear
+{txt}
+{com}. 
+. global depvars = "IScurve infl_per_rr sacratio Billsacrat"
+{txt}
+{com}. 
+. foreach var of varlist other_channel bnkcrdit ntwrth wlth stky_pr stky_pr_calvo stky_pr_rotemberg stky_price_other {c -(}
+{txt}  2{com}.         foreach depvar of global depvars{c -(}
+{txt}  3{com}.                 log using ./output/stepwise_regressions/`depvar'_`var', replace
+{txt}  4{com}.                 forvalues i=20(20)60{c -(}
+{txt}  5{com}.                         di "********************************************************************************"
+{txt}  6{com}.                         di "Interaction effects of `var' and rules on `depvar' at various horizons"
+{txt}  7{com}.                         di "********************************************************************************"
+{txt}  8{com}.                         robreg m `depvar'`i' i.`var'##(i.rule_tr i.rule_itr i.rule_g), k(4.685) bis center updatescale
+{txt}  9{com}.                         display _n "{c -(}newpage{c )-}"
+{txt} 10{com}.                 {c )-}
+{txt} 11{com}.                 log close
+{txt} 12{com}.                 translate ./output/stepwise_regressions/`depvar'_`var'.smcl ./output/stepwise_regressions/`depvar'_`var'.pdf, translator(smcl2pdf)
+{txt} 13{com}.                 ! rm ./output/stepwise_regressions/`depvar'_`var'.smcl
+{txt} 14{com}.         {c )-}
+{txt} 15{com}. {c )-}
+{txt}- foreach var of varlist other_channel bnkcrdit ntwrth wlth stky_pr stky_pr_calvo stky_pr_rotemberg stky_price_other {c -(}
+{err}variable {bf}stky_price_other{sf} not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "/lcl/data/lscratch/SD106669.000000"
+{txt}
+{com}. graph close
+{txt}  {hline 154} begin graph {hline}
+  - if d(`=c(born_date)') < d(23Jul2004) {c -(}
+  = if d(15 Nov 2023) < d(23Jul2004) {c -(}
+    di as err "your Stata executable is out of date"
+    di as err "    type -update executable- at the Stata prompt"
+    exit 498
+    {c )-}
+  - local ver = string(_caller())
+  - if (_caller() < 8.2) version 8
+  - else if (_caller() < 10 ) version 8.2
+  - else version 10
+  - gdi record = yes
+  - gdi maybedraw = yes
+  - if "`._Gr_Global.isa'" == "" {c -(}
+  = if "class" == "" {c -(}
+    ._Gr_Global = .global_g.new
+    {c )-}
+  - ._Gr_Global.callerver = "`ver'"
+  = ._Gr_Global.callerver = "18"
+  - capture noisily Graph `0'
+  = capture noisily Graph close
+    {hline 146} begin graph.Graph {hline}
+    - if `"`0'"' == `""' {c -(}
+    = if `"close"' == `""' {c -(}
+      if `"`.__GRAPHCMD'"' != `""' {c -(}
+      local 0 `.__GRAPHCMD'
+      {c )-}
+      else {c -(}
+      di as error "no existing graph command to replay"
+      exit 198
+      {c )-}
+      {c )-}
+    - local orig_cmd `0'
+    = local orig_cmd close
+    - gettoken do 0 : 0, parse(" ,")
+    - local orig2 `"`0'"'
+    = local orig2 `""'
+    - local ldo = length("`do'")
+    = local ldo = length("close")
+    - if "`do'" == bsubstr("draw",1,max(4,`ldo')) {c -(}
+    = if "close" == bsubstr("draw",1,max(4,5)) {c -(}
+      gr_draw_replay `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("display",1,max(2,`ldo')) {c -(}
+    = if "close" == bsubstr("display",1,max(2,5)) {c -(}
+      gr_draw_replay `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("save",1,max(4,`ldo')) {c -(}
+    = if "close" == bsubstr("save",1,max(4,5)) {c -(}
+      gr_save `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("use",1,max(3,`ldo')) {c -(}
+    = if "close" == bsubstr("use",1,max(3,5)) {c -(}
+      gr_use `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("print",1,max(5,`ldo')) {c -(}
+    = if "close" == bsubstr("print",1,max(5,5)) {c -(}
+      gr_print `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("dir",1,max(3,`ldo')) {c -(}
+    = if "close" == bsubstr("dir",1,max(3,5)) {c -(}
+      gr_dir `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("describe",1,max(1,`ldo')) {c -(}
+    = if "close" == bsubstr("describe",1,max(1,5)) {c -(}
+      gr_describe `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("drop",1,max(4,`ldo')) {c -(}
+    = if "close" == bsubstr("drop",1,max(4,5)) {c -(}
+      gr_drop `0'
+      exit
+      {c )-}
+    - if "`do'" == bsubstr("close",1,max(5,`ldo')) {c -(}
+    = if "close" == bsubstr("close",1,max(5,5)) {c -(}
+    - gr_close `0'
+    = gr_close 
+      {hline 147} begin gr_close {hline}
+      - version 14
+      - local f0 `0'
+      = local f0 
+      - gettoken pattern : 0, parse(" ,")
+      - local npats = 0
+      - local potnamelist
+      - if `"`pattern'"' != "" & `"`pattern'"' != "," {c -(}
+      = if `""' != "" & `""' != "," {c -(}
+        local pattern1 `pattern'
+        local potnamelist `potnamelist' `pattern1'
+        local npats = 1
+        gettoken pattern 0 : 0, parse(" ,")
+        while `"`pattern'"' != "" & `"`pattern'"' != "," {c -(}
+        local npats = `npats' + 1
+        local pattern`npats' `pattern'
+        local potnamelist `potnamelist' `pattern`npats''
+        gettoken pattern 0 : 0, parse(" ,")
+        {c )-}
+        if "`pattern'" == "," {c -(}
+        local 0 , `0'
+        {c )-}
+        {c )-}
+      - else {c -(}
+      - local pattern1
+      - local potnamelist
+      - local npats = 1
+      - {c )-}
+      - local alllist _all
+      - local justall: list alllist == potnamelist
+      - capture confirm name `potnamelist'
+      = capture confirm name 
+      - local justnames = !_rc
+      - capture syntax
+      - local hasopts = _rc
+      - if "`potnamelist'" == "" & ! `hasopts' {c -(}
+      = if "" == "" & ! 0 {c -(}
+      - local justall 1
+      - local f0 _all
+      - {c )-}
+      - capture syntax
+      - if `justall' | `justnames' | `hasopts' {c -(}
+      = if 1 | 0 | 0 {c -(}
+      - gr_close_namelist `f0'
+      = gr_close_namelist _all
+        {hline 136} begin gr_close_namelist {hline}
+        - version 8
+        - syntax [ anything(name=grlist) ]
+        - local grlist : list uniq grlist
+        - if `"`grlist'"' == `"_all"' {c -(}
+        = if `"_all"' == `"_all"' {c -(}
+        - _gs_clean_graphlist
+          {hline 132} begin _gs_clean_graphlist {hline}
+          - foreach graph in `._Gr_Global.graphlist' {c -(}
+          = foreach graph in  IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules y_t_modvars y_t_modvars_rules {c -(}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules y_t_modvars"'
+          - {c )-}
+          - {c )-}
+          - if 0`.`graph'.isofclass graph_g' {c -(}
+          = if 01 {c -(}
+          - local list `"`list' `graph'"'
+          = local list `" IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules y_t_modvars y_t_modvars_rules"'
+          - {c )-}
+          - {c )-}
+          - ._Gr_Global.graphlist = "`list'"
+          = ._Gr_Global.graphlist = " IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules y_t_modvars y_t_modvars_rules"
+          {hline 134} end _gs_clean_graphlist {hline}
+        - local grlist `._Gr_Global.graphlist'
+        = local grlist  IS20_nonmodvars IS20_nonmodvars_rules IS20_modvars IS20_modvars_rules sacrat20_nonmodvars sacrat20_nonmodvars_rules sacrat20_modvars sacrat20_modvars_rules Billsac20_nonmodvars Billsac20_nonmodvars_rules Billsac20_modvars Billsac20_modvars_rules ipr20_nonmodvars ipr20_nonmodvars_rules ipr20_modvars ipr20_modvars_rules IS40_nonmodvars IS40_nonmodvars_rules IS40_modvars IS40_modvars_rules sacrat40_nonmodvars sacrat40_nonmodvars_rules sacrat40_modvars sacrat40_modvars_rules Billsac40_nonmodvars Billsac40_nonmodvars_rules Billsac40_modvars Billsac40_modvars_rules ipr40_nonmodvars ipr40_nonmodvars_rules ipr40_modvars ipr40_modvars_rules IS60_nonmodvars IS60_nonmodvars_rules IS60_modvars IS60_modvars_rules sacrat60_nonmodvars sacrat60_nonmodvars_rules sacrat60_modvars sacrat60_modvars_rules Billsac60_nonmodvars Billsac60_nonmodvars_rules Billsac60_modvars Billsac60_modvars_rules ipr60_nonmodvars ipr60_nonmodvars_rules ipr60_modvars ipr60_modvars_rules piq_t_nonmodvars piq_t_nonmodvars_rules piq_t_modvars piq_t_modvars_rules y_t_nonmodvars y_t_nonmodvars_rules y_t_modvars y_t_modvars_rules
+        - {c )-}
+        - foreach name of local grlist {c -(}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS20_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS20_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS20_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS20_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat20_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat20_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat20_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat20_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac20_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac20_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac20_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac20_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr20_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr20_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr20_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr20_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS40_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS40_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS40_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS40_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat40_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat40_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat40_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat40_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac40_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac40_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac40_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac40_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr40_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr40_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr40_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr40_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS60_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS60_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS60_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph IS60_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat60_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat60_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat60_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph sacrat60_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac60_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac60_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac60_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph Billsac60_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr60_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr60_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr60_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph ipr60_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph piq_t_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph piq_t_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph piq_t_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph piq_t_modvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph y_t_nonmodvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph y_t_nonmodvars_rules
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph y_t_modvars
+        - {c )-}
+        - capture window manage close graph `name'
+        = capture window manage close graph y_t_modvars_rules
+        - {c )-}
+        - local curgraph "`._Gr_Global.current_graph_resync'"
+          {hline 122} begin global_g.current_graph_resync {hline}
+          - version 8
+          - if ("`gdi(topwindow)'" == "__BLANK") class exit ""
+          = if ("y_t_modvars_rules" == "__BLANK") class exit ""
+          - else if ("`gdi(topwindow)'" == "") class exit "`.current_graph'"
+          = else if ("y_t_modvars_rules" == "") class exit ""
+          - else {c -(}
+          - .current_graph = "`gdi(topwindow)'"
+          = .current_graph = "y_t_modvars_rules"
+          - class exit "`.current_graph'"
+          = class exit "y_t_modvars_rules"
+          {hline 124} end global_g.current_graph_resync {hline}
+        = local curgraph "y_t_modvars_rules"
+        - if 0`:list curgraph in grlist' {c -(}
+        = if 01 {c -(}
+        - ._Gr_Global.set_current_graph ""
+          {hline 125} begin global_g.set_current_graph {hline}
+          - version 8
+          - args graph
+          - .current_graph = "`graph'"
+          = .current_graph = ""
+          {hline 127} end global_g.set_current_graph {hline}
+        - {c )-}
+        {hline 138} end gr_close_namelist {hline}
+      - exit
+      {hline 149} end gr_close {hline}
+    - exit
+    {hline 148} end graph.Graph {hline}
+  - local rc = _rc
+  - gdi record = yes
+  - gdi maybedraw = yes
+  - gdi end
+  - exit `rc'
+  = exit 0
+  {hline 156} end graph {hline}
+
+{com}. set graphics off
+{txt}
+{com}. use .${c -(}cleandata{c )-}MMB_reg_format.dta, clear
+{txt}
+{com}. 
+. global depvars = "IScurve infl_per_rr sacratio Billsacrat"
+{txt}
+{com}. 
+. foreach var of varlist other_channel bnkcrdit ntwrth wlth stky_pr stky_pr_calvo stky_pr_rotemberg stky_pr_other {c -(}
+{txt}  2{com}.         foreach depvar of global depvars{c -(}
+{txt}  3{com}.                 log using ./output/stepwise_regressions/`depvar'_`var', replace
+{txt}  4{com}.                 forvalues i=20(20)60{c -(}
+{txt}  5{com}.                         di "********************************************************************************"
+{txt}  6{com}.                         di "Interaction effects of `var' and rules on `depvar' at various horizons"
+{txt}  7{com}.                         di "********************************************************************************"
+{txt}  8{com}.                         robreg m `depvar'`i' i.`var'##(i.rule_tr i.rule_itr i.rule_g), k(4.685) bis center updatescale
+{txt}  9{com}.                         display _n "{c -(}newpage{c )-}"
+{txt} 10{com}.                 {c )-}
+{txt} 11{com}.                 log close
+{txt} 12{com}.                 translate ./output/stepwise_regressions/`depvar'_`var'.smcl ./output/stepwise_regressions/`depvar'_`var'.pdf, translator(smcl2pdf)
+{txt} 13{com}.                 ! rm ./output/stepwise_regressions/`depvar'_`var'.smcl
+{txt} 14{com}.         {c )-}
+{txt} 15{com}. {c )-}
+{txt}- foreach var of varlist other_channel bnkcrdit ntwrth wlth stky_pr stky_pr_calvo stky_pr_rotemberg stky_pr_other {c -(}
+- foreach depvar of global depvars{c -(}
+- log using ./output/stepwise_regressions/`depvar'_`var', replace
+= log using ./output/stepwise_regressions/IScurve_other_channel, replace
+{err}log file already open
+ {txt} forvalues i=20(20)60{c -(}
+  di "********************************************************************************"
+  di "Interaction effects of `var' and rules on `depvar' at various horizons"
+  di "********************************************************************************"
+  robreg m `depvar'`i' i.`var'##(i.rule_tr i.rule_itr i.rule_g), k(4.685) bis center updatescale
+  display _n "{c -(}newpage{c )-}"
+  {c )-}
+  log close
+  translate ./output/stepwise_regressions/`depvar'_`var'.smcl ./output/stepwise_regressions/`depvar'_`var'.pdf, translator(smcl2pdf)
+  ! rm ./output/stepwise_regressions/`depvar'_`var'.smcl
+  {c )-}
+  {c )-}
+{search r(604), local:r(604);}
+
+end of do-file
+
+{search r(604), local:r(604);}
+
+{com}. do "/lcl/data/lscratch/SD106669.000000"
+{txt}
+{com}.                 log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/msu/scratch4/m1cmb07/Connor_bob/mmb/output/stepwise_regressions/infl_per_rrate_bnkcrdit.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}18 Jul 2024, 14:17:08
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
