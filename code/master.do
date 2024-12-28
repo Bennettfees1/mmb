@@ -15,18 +15,28 @@
 clear all
 macro drop _all
 
+********************************************************************************
+// Installs all necessary macros if not already installed
+********************************************************************************
+ssc install fs
+ssc install moremata
+ssc install robreg
+ssc install texresults
+ssc install coefplot
+* Add more if I've forgotten any here...
+
 
 
 ********************************************************************************
 //	Filepaths
 ********************************************************************************
-glo dir = "/msu/scratch4/m1cmb07/Connor_bob/mmb/"
+glo dir = "/Users/connorbrennan/OneDrive - The University of Chicago/mmb/"
 ***Filepath extensions
 glo rawdata = "/data/raw/"
 glo cleandata = "/data/derived/"
 glo code = "/code"
 
-cd ${dir}
+cd "${dir}"
 
 
 

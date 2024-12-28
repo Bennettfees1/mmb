@@ -12,7 +12,7 @@
 ********************************************************************************
 //	LOAD DATA
 ********************************************************************************
-cd "/msu/scratch5/m1bdf00/Bob/mmb"
+//cd "/msu/scratch5/m1bdf00/Bob/mmb"
 use "./data/derived/MMB_IRF_format.dta", clear
 
 use "./${cleandata}/MMB_IRF_format.dta", clear
