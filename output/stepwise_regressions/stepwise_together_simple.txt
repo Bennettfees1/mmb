@@ -1,4 +1,4 @@
-\begin{table}[htbp]
+\begin{table}[h!]
 \centering
 \resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{lccc}
@@ -33,7 +33,7 @@ $R^2$ from Final Weights& 0.321 & 0.332 & 0.345 \\
 \end{table}
 \newpage
 
-\begin{table}[htbp]
+\begin{table}[h!]
 \centering
 \resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{lccc}
@@ -80,7 +80,7 @@ $R^2$ from Final Weights& 0.556 & 0.542 & 0.509 \\
 \end{table}
 \newpage
 
-\begin{table}[htbp]
+\begin{table}[h!]
 \centering
 \resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{lccc}

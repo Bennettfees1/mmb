@@ -1,0 +1,110 @@
+\begin{table}[h!]
+\centering
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{lccc}
+\hline
+\multicolumn{4}{l}{\textbf{Dependent Variable: IS Curve}} \\
+\hline
+\textbf{{Horizon}} & 20 & 40 & 60 \\
+\hline
+\multirow{2}{*}{Constant} & -0.262*** & -0.251** & -0.274*** \\
+ & (0.092) & (0.104) & (0.074) \\
+\multirow{2}{*}{Rule: Growth} & -0.457*** & -0.494*** & -0.526*** \\
+ & (0.096) & (0.108) & (0.096) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & -0.336*** & -0.380*** & -0.339*** \\
+ & (0.097) & (0.109) & (0.096) \\
+\multirow{2}{*}{Sticky Prices (Calvo)} & -0.275** & -0.335*** &  \\
+ & (0.109) & (0.122) &  \\
+\multirow{2}{*}{Sticky Price (Calvo) $\times$ Price Idx.} & 0.178* & 0.202* &  \\
+ & (0.098) & (0.110) &  \\
+\multirow{2}{*}{Sticky Price (Rotemberg) $\times$ Price Idx.} &  &  & 0.575* \\
+ &  &  & (0.344) \\
+\multirow{2}{*}{Wage Idx.} &  &  & -0.180** \\
+ &  &  & (0.083) \\
+\hline
+Observations & 222 & 222 & 222 \\
+$R^2$ from Final Weights&  &  &  \\
+\hline
+\end{tabular}
+}
+\caption{Stepwise RLM results for IS Curve}
+\end{table}
+\newpage
+
+\begin{table}[h!]
+\centering
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{lccc}
+\hline
+\multicolumn{4}{l}{\textbf{Dependent Variable: Pi Curve}} \\
+\hline
+\textbf{{Horizon}} & 20 & 40 & 60 \\
+\hline
+\multirow{2}{*}{Constant} & -0.101*** & -0.087** & -0.082** \\
+ & (0.030) & (0.035) & (0.038) \\
+\multirow{2}{*}{Price Idx} &  &  & -0.153*** \\
+ &  &  & (0.050) \\
+\multirow{2}{*}{Rule: Growth} & -0.424*** & -0.459*** & -0.484*** \\
+ & (0.039) & (0.043) & (0.047) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & -0.178*** & -0.198*** & -0.213*** \\
+ & (0.039) & (0.043) & (0.047) \\
+\multirow{2}{*}{Sticky Price (Calvo) $\times$ Price Idx.} &  & -0.092** &  \\
+ &  & (0.045) &  \\
+\multirow{2}{*}{Sticky Price (Other) $\times$ Price Idx.} & -0.469*** & -0.466*** & -0.304* \\
+ & (0.137) & (0.154) & (0.171) \\
+\multirow{2}{*}{Wage Idx.} & 0.082** & 0.162*** & 0.237*** \\
+ & (0.037) & (0.049) & (0.055) \\
+\multirow{2}{*}{Wage Idx. (Mult. Price)} & 0.158*** & 0.158** & 0.152** \\
+ & (0.061) & (0.069) & (0.074) \\
+\hline
+Observations & 222 & 222 & 222 \\
+$R^2$ from Final Weights&  &  &  \\
+\hline
+\end{tabular}
+}
+\caption{Stepwise RLM results for Pi Curve}
+\end{table}
+\newpage
+
+\begin{table}[h!]
+\centering
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{lccc}
+\hline
+\multicolumn{4}{l}{\textbf{Dependent Variable: Sacrifice Ratio}} \\
+\hline
+\textbf{{Horizon}} & 20 & 40 & 60 \\
+\hline
+\multirow{2}{*}{Constant} & 8.842*** & 8.757*** & 7.853*** \\
+ & (1.232) & (1.617) & (1.391) \\
+\multirow{2}{*}{Price Idx} & -3.656*** & 593.402*** & 1425.221*** \\
+ & (0.834) & (2.731) & (5.095) \\
+\multirow{2}{*}{Rule: Growth} & 2.871*** & 3.288*** & 3.426** \\
+ & (0.672) & (1.058) & (1.380) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & 1.584** & 1.624 & 1.992 \\
+ & (0.672) & (1.058) & (1.380) \\
+\multirow{2}{*}{Sticky Prices (Calvo)} & -3.968*** & -2.421 &  \\
+ & (1.252) & (1.635) &  \\
+\multirow{2}{*}{Sticky Price (Calvo) $\times$ Price Idx.} &  & -597.844*** & -1430.752*** \\
+ &  & (2.890) & (5.002) \\
+\multirow{2}{*}{Sticky Prices (Other)} & -3.927** &  &  \\
+ & (1.596) &  &  \\
+\multirow{2}{*}{Sticky Price (Other) $\times$ Price Idx.} &  &  & -1432.952*** \\
+ &  &  & (6.935) \\
+\multirow{2}{*}{Sticky Prices (Rotemberg)} & -8.300*** & -8.066*** & -7.215*** \\
+ & (1.341) & (1.701) & (1.808) \\
+\multirow{2}{*}{Sticky Price (Rotemberg) $\times$ Price Idx.} & 361.209*** &  &  \\
+ & (2.455) &  &  \\
+\multirow{2}{*}{Sticky Wages} & -1.536** & -2.760** & -3.438** \\
+ & (0.729) & (1.156) & (1.452) \\
+\multirow{2}{*}{Wage Idx.} & 3.817*** & 5.686*** & 7.264*** \\
+ & (0.955) & (1.481) & (1.925) \\
+\hline
+Observations & 197 & 197 & 197 \\
+$R^2$ from Final Weights&  &  &  \\
+\hline
+\end{tabular}
+}
+\caption{Stepwise RLM results for Sacrifice Ratio}
+\end{table}
+\newpage
