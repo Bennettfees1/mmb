@@ -319,7 +319,7 @@ glo time_limit = 60
 //glo depvars "piq_timing_max y_timing_max rrate_timing_min irate_timing_min"
 glo depvars "y_timing_max piq_timing_max"
 foreach var of global depvars{
-	foreach type in "frics_det" "frics_sim" "properties" {
+	foreach type in "all_sim" "all_det" "frics_det" "frics_sim" "properties" {
 		loc condition " "
 		glo keep_stepping = 1
 		glo entered_vars
@@ -338,7 +338,7 @@ foreach var of global depvars{
 cls
 foreach depvar of global depvars{
 	//foreach type in "mod_Oth" "mod_All" "nonmod_All" "nonmod_Est"{
-	foreach type in "frics_det" "frics_sim" "properties" {
+	foreach type in "all_sim" "all_det" "frics_det" "frics_sim" "properties" {
 		log using ./output/stepwise_regressions/`depvar'_`type', replace
 		capture ! rm ./output/stepwise_regressions/`depvar'_`type'.pdf
 		di "********************************************************************************"
@@ -364,7 +364,7 @@ foreach depvar of global depvars{
 	loc h = 1
 
 	//foreach type in "mod_All" "nonmod_All"{
-	foreach type in "frics_det" "frics_sim" "properties" {
+	foreach type in "all_sim" "all_det" "frics_det" "frics_sim" "properties" {
 		glo tabnum: word `h' of ${numbers}
 				
 		${reg_`depvar'_`type'}

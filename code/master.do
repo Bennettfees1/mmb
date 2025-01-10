@@ -73,11 +73,16 @@ cd "${dir}"
 	//glo indepvars_mod_Oth "open other_channel stky_pr stky_wg pr_ndx wg_ndx rule_tr rule_g rule_itr"
 	//glo indepvars_mod_All "open ntwrth bank wlth stky_pr stky_wg pr_ndx wg_ndx rule_tr rule_g rule_itr"
 	
-	glo indepvars_frics_detailed = "stky_pr_calvo stky_pr_rotemberg stky_pr_othern stky_wg pr_ndx wg_ndx wg_ndx_prprice wg_ndx_mult wg_ndx_other i.stky_pr_calvo#i.pr_ndx i.stky_pr_rotemberg#i.pr_ndx i.stky_pr_other#i.pr_ndx i.stky_wg#i.wg_ndx i.stky_wg#i.wg_ndx_prprice i.stky_wg#i.wg_ndx_mult i.stky_wg#i.wg_ndx_other bnkcrdit ntwrth wlth open other_channel"
+	glo indepvars_frics_det = "stky_pr_calvo stky_pr_rotemberg stky_pr_othern stky_wg pr_ndx wg_ndx wg_ndx_prprice wg_ndx_mult wg_ndx_other i.stky_pr_calvo#i.pr_ndx i.stky_pr_rotemberg#i.pr_ndx i.stky_pr_other#i.pr_ndx i.stky_wg#i.wg_ndx i.stky_wg#i.wg_ndx_prprice i.stky_wg#i.wg_ndx_mult i.stky_wg#i.wg_ndx_other bnkcrdit ntwrth wlth open other_channel"
 					  
-	glo indepvars_frics_simlpe = "stky_pr_calvo stky_pr_rotemberg stky_pr_othern stky_wg pr_ndx wg_ndx i.stky_pr_calvo#i.pr_ndx i.stky_pr_rotemberg#i.pr_ndx i.stky_pr_other#i.pr_ndx i.stky_wg#i.wg_ndx bnkcrdit ntwrth wlth open other_channel"
+	glo indepvars_frics_sim = "stky_pr_calvo stky_pr_rotemberg stky_pr_othern stky_wg pr_ndx wg_ndx i.stky_pr_calvo#i.pr_ndx i.stky_pr_rotemberg#i.pr_ndx i.stky_pr_other#i.pr_ndx i.stky_wg#i.wg_ndx bnkcrdit ntwrth wlth open other_channel"
 					  
 	glo indepvars_properties = "estimated est_early est_late vint_mind cb_authors_ext ln_neq"
+	
+	glo indepvars_all_det = "${indepvars_frics_det} ${indepvars_properties}"
+	
+	glo indepvars_all_sim = "${indepvars_frics_sim} ${indepvars_properties}"
+
 
 *Significances to enter/exit stepwise regression (alpha_enter is p-values below this enter, alpha_exit is p-values above this leave)
 	global alpha_enter = 0.15
