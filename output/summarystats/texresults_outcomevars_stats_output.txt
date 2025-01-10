@@ -58,3 +58,5 @@
 \newcommand{\outcomeSumStatTtwoROWthreeCOLUMNnine}{$31.71$}
 \newcommand{\outcomeSumStatTtwoROWfourCOLUMNnine}{$5.27$}
 \newcommand{\outcomeSumStatTtwoROWfiveCOLUMNnine}{$66$}
+\newcommand{\stepwiseToneROWoneCOLUMNonebeta}{$-0.92$}
+\newcommand{\stepwiseToneROWoneCOLUMNonebeta}{$-0.92$}

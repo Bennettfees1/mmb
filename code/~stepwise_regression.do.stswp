@@ -358,6 +358,7 @@ foreach depvar of global depvars{
 *Now put those results ready for Latex!
 //appending to the results file; no need to restary local j either because these are just new columns in the same tables
 foreach depvar of global depvars{
+	loc j = 1 
 	glo colnum: word `j' of ${numbers}
 	
 	loc h = 1
