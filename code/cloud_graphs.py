@@ -10,7 +10,7 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-os.chdir('/msu/scratch4/m1cmb07/Connor_bob/mmb/')
+os.chdir('/msu/scratch5/m1bdf00/Bob/mmb/')
 
 graph_opts = {'SW_col': '--b',
               'VAR_col': '--k',
@@ -28,6 +28,9 @@ graph_opts = {'SW_col': '--b',
 
 
 df = pd.read_stata('./data/derived/MMB_IRF_format_full.dta')
+
+print(df)
+
 
 variables = ['piq', 'y', 'irate', 'rrate']
 titles = ['Quarterly Inflation',
@@ -140,12 +143,8 @@ for var, title, bound in zip(variables, titles, bounds):
         
         
         
+
         
-        
-        
-        
-        
-        
-        
+
         
         
