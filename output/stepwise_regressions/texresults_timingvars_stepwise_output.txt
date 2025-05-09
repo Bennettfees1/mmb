@@ -1,0 +1,2 @@
+\newcommand{\stepwiseToneROWoneCOLUMNonebeta}{$-0.6900000000000001$}
+\newcommand{\stepwiseToneROWoneCOLUMNonebeta}{$-0.6900000000000001$}

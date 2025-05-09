@@ -11,6 +11,10 @@
 *		can be found in "mmb/user_defined_rules.png"
 *     2. Set cd below to current project directory and extensions as appropriate
 *     3. Make sure that file of model characteristcs is in project directory
+*
+*************************SUPER DUPER IMPORTANT*************************
+*		AFTER RUNNING THIS SCRIPT RUN MMB_robreg.ipynb manually!!!!
+***********************************************************************
 ********************************************************************************
 clear all
 macro drop _all
@@ -18,11 +22,11 @@ macro drop _all
 ********************************************************************************
 // Installs all necessary macros if not already installed
 ********************************************************************************
-ssc install fs
-ssc install moremata
-ssc install robreg
-ssc install texresults
-ssc install coefplot
+ssc install fs, replace
+ssc install moremata, replace
+ssc install robreg, replace
+ssc install texresults, replace
+ssc install coefplot, replace
 * Add more if I've forgotten any here...
 
 
@@ -85,7 +89,7 @@ cd "${dir}"
 
 
 *Significances to enter/exit stepwise regression (alpha_enter is p-values below this enter, alpha_exit is p-values above this leave)
-	global alpha_enter = 0.15
+	global alpha_enter = 0.1
 	global alpha_exit = 0.15
 
 *What do we call outcome/timing vars?

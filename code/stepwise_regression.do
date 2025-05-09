@@ -8,6 +8,8 @@ use .${cleandata}MMB_reg_format.dta, clear
 
 
 //Migrated this portion over to Python
+//! python3 .${code}/do_not_change_this_file_plz_make_all_changes_to_ipynb_version_MMB_robreg.py
+
 /* 
 ********************************************************************************
 *** Outcome Dependent Variables
@@ -230,7 +232,8 @@ foreach depvar of global depvars{
 	loc j = `j'+1
 }
 */
-	
+
+
 	
 	
 	
@@ -238,6 +241,9 @@ foreach depvar of global depvars{
 ********************************************************************************
 *** Timing Dependent Variables
 ********************************************************************************
+
+glo resultsfile = "./output/stepwise_regressions/texresults_timingvars_stepwise_output.txt"
+capture ! rm -r "${resultsfile}"
 
 capture program drop step_reg_nb
 program define step_reg_nb
@@ -406,7 +412,7 @@ foreach depvar of global depvars{
 					}
 					
 					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") result(`beta') append unitzero
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") string("(`se')") append unitzero
+					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") "(`se')" append unitzero
 					
 					//is the variable significant?
 					if r(table)[4, ${vnum}] < 0.01{
