@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[88]:
+# In[103]:
 
 
 import os
@@ -18,7 +18,7 @@ from nbconvert import PythonExporter
 os.chdir('/Users/connorbrennan/OneDrive - The University of Chicago/mmb/data')
 
 
-# In[89]:
+# In[104]:
 
 
 df, meta = pyreadstat.read_dta('derived/MMB_reg_format.dta')
@@ -32,7 +32,7 @@ df_estimated = df.loc[df['estimated']==1]
 df_calibrated = df.loc[df['calibrated']==1]
 
 
-# In[90]:
+# In[105]:
 
 
 # Stepwise regression parameters
@@ -81,7 +81,7 @@ indepvars_detailed = frictions_detailed + properties
 indepvars_simple = frictions_simple + properties
 
 
-# In[ ]:
+# In[106]:
 
 
 def stepwise_reg(depvar, covariates, data, alphas):
@@ -180,7 +180,7 @@ def get_r2(orig_reg, depvar, data):
     return wls_reg.rsquared_adj
 
 
-# In[92]:
+# In[107]:
 
 
 var_labels = {
@@ -393,7 +393,7 @@ depvars = ['IScurve', 'infl_per_rr', 'sacratio']
 horizons = [20, 40, 60]
 
 
-# In[93]:
+# In[108]:
 
 
 stepwise_regs_smp = {}
@@ -414,19 +414,19 @@ for depvar in depvars:
         print(f'Completed detailed stepwise regressions for {depvar}{horizon}!')
 
 
-# In[94]:
+# In[109]:
 
 
 generate_latex_tables(stepwise_regs_dtd, r2_values_dtd, depvars, horizons, var_labels, depvar_labels, '../output/stepwise_regressions/stepwise_together_detailed.txt')
 
 
-# In[95]:
+# In[110]:
 
 
 generate_latex_tables(stepwise_regs_smp, r2_values_smp, depvars, horizons, var_labels, depvar_labels, '../output/stepwise_regressions/stepwise_together_simple.txt')
 
 
-# In[96]:
+# In[111]:
 
 
 stepwise_regs_frics_smp = {}
@@ -451,7 +451,7 @@ for depvar in depvars:
 generate_latex_tables(stepwise_regs_frics_dtd, r2_values_frics_dtd, depvars, horizons, var_labels, depvar_labels, '../output/stepwise_regressions/stepwise_frictions_detailed.txt')
 
 
-# In[97]:
+# In[112]:
 
 
 stepwise_regs_props_smp = {}
@@ -465,7 +465,7 @@ for depvar in depvars:
 generate_latex_tables(stepwise_regs_props_smp, r2_values_props_smp, depvars, horizons, var_labels, depvar_labels, '../output/stepwise_regressions/stepwise_properties.txt')
 
 
-# In[102]:
+# In[113]:
 
 
 import nbformat
