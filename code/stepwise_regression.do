@@ -362,7 +362,7 @@ foreach depvar of global depvars{
 
 
 *Now put those results ready for Latex!
-//appending to the results file; no need to restary local j either because these are just new columns in the same tables
+//appending to the results file; no need to restart local j either because these are just new columns in the same tables
 foreach depvar of global depvars{
 	loc j = 1 
 	glo colnum: word `j' of ${numbers}
@@ -410,9 +410,10 @@ foreach depvar of global depvars{
 					if `se' < 1 {
 						loc se = "0`se'" //put a 0 in front of the SE if less than 1
 					}
+					loc beta = string(`beta')
 					
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") result(`beta') append unitzero
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") "(`se')" append unitzero
+					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") string(`beta') append unitzero
+					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") string("(`se')") append unitzero
 					
 					//is the variable significant?
 					if r(table)[4, ${vnum}] < 0.01{
@@ -448,7 +449,8 @@ foreach depvar of global depvars{
 			if `se' < 1 {
 				loc se = "0`se'" //put a 0 in front of the SE if less than 1
 			}
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") result(`beta') append unitzero
+			loc beta = string(`beta')
+			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") string(`beta') append unitzero
 			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") string("(`se')") append unitzero
 			
 			//is the constant significant?
@@ -465,9 +467,11 @@ foreach depvar of global depvars{
 				texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string() append 
 			}
 			
-			
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}COLUMN${colnum}N") result(e(N)) append unitzero
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}COLUMN${colnum}rsq") result(e(r2_p)) append unitzero
+			loc N = string(e(N))
+			loc r2 = string(e(r2_p), "%9.3f")
+
+			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}COLUMN${colnum}N") string(`N') append unitzero
+			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}COLUMN${colnum}rsq") string(`r2')  append unitzero
 
 		loc h = `h'+1
 	}
