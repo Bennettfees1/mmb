@@ -58,7 +58,7 @@ gen flag_pi_wrongsign = 1 if (pi<0 & period==${qforgive}+1)
 egen piq_cum${horizon} = sum(piq) if period<=$horizon & piq_chg_sign_sum<1, by(id)
 egen y_cum${horizon} = sum(y) if period<=$horizon & y_chg_sign_sum<1, by(id)
 egen irate_cum${horizon} = sum(irate) if period<=$horizon & irate_chg_sign_sum<1, by(id)
-egen rrate_cum${horizon} = sum(rrate) if period<=$horizon & rrate_chg_sign_sum<1, by(id)
+egen rrate_cum${horizon} = sum(rrate) if period<=$horizon //& rrate_chg_sign_sum<1, by(id)
 egen pi_cum${horizon} = sum(pi) if period<=$horizon & pi_chg_sign_sum<1, by(id)
 
 

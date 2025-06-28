@@ -7,31 +7,23 @@
 \hline
 \textbf{{Horizon}} & 20 & 40 & 60 \\
 \hline
-\multirow{2}{*}{Constant} & -0.093 & -0.281*** & -0.432*** \\
- & (0.108) & (0.096) & (0.122) \\
-\multirow{2}{*}{Central Bank Author} & -0.224** &  &  \\
- & (0.094) &  &  \\
-\multirow{2}{*}{Estimated} &  & 0.170** & 0.229** \\
- &  & (0.084) & (0.089) \\
-\multirow{2}{*}{Net Worth Channel} & -0.527*** & -0.672*** & -0.791*** \\
- & (0.088) & (0.094) & (0.101) \\
-\multirow{2}{*}{Rule: Growth} & -0.535*** & -0.541*** & -0.567*** \\
- & (0.092) & (0.099) & (0.104) \\
-\multirow{2}{*}{Rule: Inert. Taylor} & -0.361*** & -0.391*** & -0.409*** \\
- & (0.092) & (0.100) & (0.104) \\
-\multirow{2}{*}{Sticky Price (Other) $\times$ Price Idx.} & -0.545** & -0.774*** & -0.802*** \\
- & (0.241) & (0.255) & (0.268) \\
-\multirow{2}{*}{Sticky Price (Rotemberg) $\times$ Price Idx.} & 0.587* & 0.919** & 0.971** \\
- & (0.346) & (0.360) & (0.378) \\
-\multirow{2}{*}{Sticky Wages} & 0.146* &  &  \\
- & (0.081) &  &  \\
-\multirow{2}{*}{Late Vintage} &  &  & 0.181* \\
- &  &  & (0.099) \\
-\multirow{2}{*}{Wealth Channel} & -0.283*** & -0.180** & -0.197** \\
- & (0.090) & (0.092) & (0.096) \\
+\multirow{2}{*}{Constant} & -0.201*** & -0.228*** & -0.240*** \\
+ & (0.059) & (0.067) & (0.093) \\
+\multirow{2}{*}{Net Worth Channel} & -0.711*** & -0.903*** & -0.917*** \\
+ & (0.073) & (0.083) & (0.091) \\
+\multirow{2}{*}{Rule: Growth} & -0.433*** & -0.400*** & -0.386*** \\
+ & (0.079) & (0.089) & (0.095) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & -0.264*** & -0.240*** & -0.234** \\
+ & (0.079) & (0.090) & (0.095) \\
+\multirow{2}{*}{Sticky Prices (Calvo)} &  &  & -0.251** \\
+ &  &  & (0.109) \\
+\multirow{2}{*}{Sticky Price (Calvo) $\times$ Price Idx.} &  &  & 0.329*** \\
+ &  &  & (0.096) \\
+\multirow{2}{*}{Sticky Price (Rotemberg) $\times$ Price Idx.} & 0.973*** & 1.182*** & 1.210*** \\
+ & (0.283) & (0.322) & (0.350) \\
 \hline
 Observations & 222 & 222 & 222 \\
-$R^2$ from Final Weights& 0.332 & 0.343 & 0.364 \\
+$R^2$ from Final Weights& 0.423 & 0.441 & 0.436 \\
 \hline
 \end{tabular}
 }
@@ -48,33 +40,37 @@ $R^2$ from Final Weights& 0.332 & 0.343 & 0.364 \\
 \hline
 \textbf{{Horizon}} & 20 & 40 & 60 \\
 \hline
-\multirow{2}{*}{Constant} & -0.153*** & -0.153*** & -0.091** \\
- & (0.043) & (0.049) & (0.040) \\
-\multirow{2}{*}{Bank Credit Channel} &  & 0.155*** &  \\
- &  & (0.038) &  \\
-\multirow{2}{*}{Estimated} & 0.151*** & 0.151*** &  \\
- & (0.033) & (0.039) &  \\
-\multirow{2}{*}{Net Worth Channel} &  &  & 0.092** \\
- &  &  & (0.046) \\
-\multirow{2}{*}{Other Channel} & 0.159*** &  &  \\
+\multirow{2}{*}{Constant} & -0.200*** & -0.158*** & -0.155*** \\
+ & (0.062) & (0.026) & (0.035) \\
+\multirow{2}{*}{Late Data} & 0.068** &  &  \\
+ & (0.034) &  &  \\
+\multirow{2}{*}{Estimated} & 0.095* & 0.111*** & 0.101*** \\
+ & (0.050) & (0.027) & (0.030) \\
+\multirow{2}{*}{Other Channel} & 0.087** &  &  \\
  & (0.038) &  &  \\
-\multirow{2}{*}{Price Idx} &  &  & -0.149*** \\
- &  &  & (0.052) \\
-\multirow{2}{*}{Rule: Growth} & -0.455*** & -0.481*** & -0.483*** \\
- & (0.039) & (0.045) & (0.048) \\
-\multirow{2}{*}{Rule: Inert. Taylor} & -0.200*** & -0.206*** & -0.211*** \\
- & (0.039) & (0.045) & (0.048) \\
-\multirow{2}{*}{Sticky Price (Other) $\times$ Price Idx.} & -0.707*** & -0.595*** & -0.234* \\
- & (0.099) & (0.115) & (0.128) \\
-\multirow{2}{*}{Sticky Prices (Rotemberg)} & -0.130*** & -0.118** &  \\
- & (0.047) & (0.054) &  \\
-\multirow{2}{*}{Wage Idx.} &  &  & 0.244*** \\
- &  &  & (0.054) \\
-\multirow{2}{*}{Wealth Channel} & -0.217*** & -0.083* &  \\
- & (0.042) & (0.043) &  \\
+\multirow{2}{*}{Price Idx} &  & -0.058** & -0.093*** \\
+ &  & (0.026) & (0.032) \\
+\multirow{2}{*}{Rule: Growth} & -0.325*** & -0.318*** & -0.331*** \\
+ & (0.036) & (0.027) & (0.029) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & -0.163*** & -0.161*** & -0.172*** \\
+ & (0.036) & (0.027) & (0.029) \\
+\multirow{2}{*}{Sticky Prices (Calvo)} & 0.094** &  &  \\
+ & (0.037) &  &  \\
+\multirow{2}{*}{Sticky Prices (Other)} &  & -0.138*** &  \\
+ &  & (0.037) &  \\
+\multirow{2}{*}{Sticky Price (Other) $\times$ Price Idx.} & -0.416*** &  & -0.178** \\
+ & (0.080) &  & (0.080) \\
+\multirow{2}{*}{Sticky Wages} &  & 0.118*** &  \\
+ &  & (0.024) &  \\
+\multirow{2}{*}{Late Vintage} &  &  & 0.063** \\
+ &  &  & (0.029) \\
+\multirow{2}{*}{Wage Idx.} &  &  & 0.132*** \\
+ &  &  & (0.036) \\
+\multirow{2}{*}{Wealth Channel} & -0.140*** &  & -0.068** \\
+ & (0.041) &  & (0.027) \\
 \hline
-Observations & 222 & 222 & 222 \\
-$R^2$ from Final Weights& 0.546 & 0.487 & 0.461 \\
+Observations & 149 & 222 & 222 \\
+$R^2$ from Final Weights& 0.577 & 0.535 & 0.531 \\
 \hline
 \end{tabular}
 }
