@@ -1,23 +1,27 @@
 \begin{table}[h!]
 \centering
 \resizebox{0.9\textwidth}{!}{%
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \hline
-\multicolumn{4}{l}{\textbf{Dependent Variable: IS Curve}} \\
+\multicolumn{3}{l}{\textbf{Dependent Variable: IS Curve}} \\
 \hline
-\textbf{{Horizon}} & 20 & 40 & 60 \\
+\textbf{{Horizon}} & 20 & 40 \\
 \hline
-\multirow{2}{*}{Constant} & -0.215*** & -0.154** & -0.131** \\
- & (0.075) & (0.065) & (0.060) \\
-\multirow{2}{*}{Central Bank Author} & -0.142** & -0.153** & -0.154*** \\
- & (0.070) & (0.061) & (0.057) \\
-\multirow{2}{*}{Rule: Growth} & -0.353*** & -0.362*** & -0.390*** \\
- & (0.078) & (0.067) & (0.062) \\
-\multirow{2}{*}{Rule: Inert. Taylor} & -0.228*** & -0.266*** & -0.273*** \\
- & (0.078) & (0.068) & (0.063) \\
+\multirow{2}{*}{Constant} & -0.346*** & -0.426*** \\
+ & (0.120) & (0.145) \\
+\multirow{2}{*}{Central Bank Author} & -0.245** & -0.268** \\
+ & (0.100) & (0.121) \\
+\multirow{2}{*}{Estimated} & 0.188** & 0.299*** \\
+ & (0.091) & (0.111) \\
+\multirow{2}{*}{Rule: Growth} & -0.422*** & -0.443*** \\
+ & (0.110) & (0.133) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & -0.284** & -0.300** \\
+ & (0.110) & (0.134) \\
+\multirow{2}{*}{Early Vintage} &  & -0.387* \\
+ &  & (0.200) \\
 \hline
-Observations & 222 & 222 & 222 \\
-$R^2$ from Final Weights& 0.132 & 0.185 & 0.233 \\
+Observations & 222 & 222 \\
+$R^2$ from Final Weights& 0.123 & 0.133 \\
 \hline
 \end{tabular}
 }
@@ -28,25 +32,25 @@ $R^2$ from Final Weights& 0.132 & 0.185 & 0.233 \\
 \begin{table}[h!]
 \centering
 \resizebox{0.9\textwidth}{!}{%
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \hline
-\multicolumn{4}{l}{\textbf{Dependent Variable: Pi Curve}} \\
+\multicolumn{3}{l}{\textbf{Dependent Variable: Pi Curve}} \\
 \hline
-\textbf{{Horizon}} & 20 & 40 & 60 \\
+\textbf{{Horizon}} & 20 & 40 \\
 \hline
-\multirow{2}{*}{Constant} & -0.184*** & -0.191*** & -0.200*** \\
- & (0.035) & (0.034) & (0.036) \\
-\multirow{2}{*}{Estimated} & 0.117*** & 0.118*** & 0.122*** \\
- & (0.026) & (0.025) & (0.027) \\
-\multirow{2}{*}{Rule: Growth} & -0.333*** & -0.321*** & -0.329*** \\
- & (0.031) & (0.030) & (0.032) \\
-\multirow{2}{*}{Rule: Inert. Taylor} & -0.160*** & -0.160*** & -0.164*** \\
- & (0.031) & (0.030) & (0.032) \\
-\multirow{2}{*}{Late Vintage} & 0.073** & 0.073*** & 0.080*** \\
- & (0.029) & (0.027) & (0.029) \\
+\multirow{2}{*}{Constant} & -0.161*** & -0.204*** \\
+ & (0.042) & (0.043) \\
+\multirow{2}{*}{Estimated} & 0.109*** & 0.144*** \\
+ & (0.031) & (0.032) \\
+\multirow{2}{*}{Rule: Growth} & -0.378*** & -0.353*** \\
+ & (0.037) & (0.038) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & -0.173*** & -0.152*** \\
+ & (0.038) & (0.038) \\
+\multirow{2}{*}{Late Vintage} & 0.080** & 0.096*** \\
+ & (0.034) & (0.035) \\
 \hline
-Observations & 222 & 222 & 222 \\
-$R^2$ from Final Weights& 0.451 & 0.455 & 0.425 \\
+Observations & 222 & 222 \\
+$R^2$ from Final Weights& 0.412 & 0.408 \\
 \hline
 \end{tabular}
 }
@@ -57,25 +61,25 @@ $R^2$ from Final Weights& 0.451 & 0.455 & 0.425 \\
 \begin{table}[h!]
 \centering
 \resizebox{0.9\textwidth}{!}{%
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \hline
-\multicolumn{4}{l}{\textbf{Dependent Variable: Sacrifice Ratio}} \\
+\multicolumn{3}{l}{\textbf{Dependent Variable: Sacrifice Ratio}} \\
 \hline
-\textbf{{Horizon}} & 20 & 40 & 60 \\
+\textbf{{Horizon}} & 20 & 40 \\
 \hline
-\multirow{2}{*}{Constant} & 6.809*** & 7.889*** & 9.541*** \\
- & (1.529) & (2.227) & (2.871) \\
-\multirow{2}{*}{Central Bank Author} &  & 1.828* &  \\
- &  & (1.010) &  \\
-\multirow{2}{*}{$\log($Num. of Eqs.$)$} & -1.369*** & -2.069*** & -1.955** \\
- & (0.505) & (0.716) & (0.949) \\
-\multirow{2}{*}{Rule: Growth} & 2.801*** & 3.131*** & 3.123** \\
- & (0.816) & (1.153) & (1.531) \\
-\multirow{2}{*}{Rule: Inert. Taylor} & 1.494* & 1.599 & 1.685 \\
- & (0.816) & (1.153) & (1.531) \\
+\multirow{2}{*}{Constant} & 6.809*** & 7.889*** \\
+ & (1.529) & (2.227) \\
+\multirow{2}{*}{Central Bank Author} &  & 1.828* \\
+ &  & (1.010) \\
+\multirow{2}{*}{$\log($Num. of Eqs.$)$} & -1.369*** & -2.069*** \\
+ & (0.505) & (0.716) \\
+\multirow{2}{*}{Rule: Growth} & 2.801*** & 3.131*** \\
+ & (0.816) & (1.153) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & 1.494* & 1.599 \\
+ & (0.816) & (1.153) \\
 \hline
-Observations & 197 & 197 & 197 \\
-$R^2$ from Final Weights& 0.101 & 0.096 & 0.043 \\
+Observations & 197 & 197 \\
+$R^2$ from Final Weights& 0.101 & 0.096 \\
 \hline
 \end{tabular}
 }

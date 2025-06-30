@@ -1,29 +1,27 @@
 \begin{table}[h!]
 \centering
 \resizebox{0.9\textwidth}{!}{%
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \hline
-\multicolumn{4}{l}{\textbf{Dependent Variable: IS Curve}} \\
+\multicolumn{3}{l}{\textbf{Dependent Variable: IS Curve}} \\
 \hline
-\textbf{{Horizon}} & 20 & 40 & 60 \\
+\textbf{{Horizon}} & 20 & 40 \\
 \hline
-\multirow{2}{*}{Constant} & -0.201*** & -0.228*** & -0.240*** \\
- & (0.059) & (0.067) & (0.093) \\
-\multirow{2}{*}{Net Worth Channel} & -0.711*** & -0.903*** & -0.917*** \\
- & (0.073) & (0.083) & (0.091) \\
-\multirow{2}{*}{Rule: Growth} & -0.433*** & -0.400*** & -0.386*** \\
- & (0.079) & (0.089) & (0.095) \\
-\multirow{2}{*}{Rule: Inert. Taylor} & -0.264*** & -0.240*** & -0.234** \\
- & (0.079) & (0.090) & (0.095) \\
-\multirow{2}{*}{Sticky Prices (Calvo)} &  &  & -0.251** \\
- &  &  & (0.109) \\
-\multirow{2}{*}{Sticky Price (Calvo) $\times$ Price Idx.} &  &  & 0.329*** \\
- &  &  & (0.096) \\
-\multirow{2}{*}{Sticky Price (Rotemberg) $\times$ Price Idx.} & 0.973*** & 1.182*** & 1.210*** \\
- & (0.283) & (0.322) & (0.350) \\
+\multirow{2}{*}{Constant} & -0.166*** & -0.172*** \\
+ & (0.061) & (0.061) \\
+\multirow{2}{*}{Net Worth Channel} & -0.840*** & -1.197*** \\
+ & (0.075) & (0.075) \\
+\multirow{2}{*}{Rule: Growth} & -0.445*** & -0.408*** \\
+ & (0.080) & (0.081) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & -0.296*** & -0.265*** \\
+ & (0.080) & (0.081) \\
+\multirow{2}{*}{Sticky Price (Other) $\times$ Price Idx.} & -0.368* & -0.390* \\
+ & (0.202) & (0.204) \\
+\multirow{2}{*}{Sticky Price (Rotemberg) $\times$ Price Idx.} & 1.218*** & 1.767*** \\
+ & (0.288) & (0.290) \\
 \hline
-Observations & 222 & 222 & 222 \\
-$R^2$ from Final Weights& 0.423 & 0.441 & 0.436 \\
+Observations & 222 & 222 \\
+$R^2$ from Final Weights& 0.497 & 0.635 \\
 \hline
 \end{tabular}
 }
@@ -34,45 +32,39 @@ $R^2$ from Final Weights& 0.423 & 0.441 & 0.436 \\
 \begin{table}[h!]
 \centering
 \resizebox{0.9\textwidth}{!}{%
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \hline
-\multicolumn{4}{l}{\textbf{Dependent Variable: Pi Curve}} \\
+\multicolumn{3}{l}{\textbf{Dependent Variable: Pi Curve}} \\
 \hline
-\textbf{{Horizon}} & 20 & 40 & 60 \\
+\textbf{{Horizon}} & 20 & 40 \\
 \hline
-\multirow{2}{*}{Constant} & 0.046 & -0.152*** & -0.150*** \\
- & (0.043) & (0.026) & (0.041) \\
-\multirow{2}{*}{Central Bank Author} &  &  & -0.052* \\
- &  &  & (0.029) \\
-\multirow{2}{*}{Early Data } & -0.093*** &  &  \\
- & (0.033) &  &  \\
-\multirow{2}{*}{Estimated} &  & 0.103*** & 0.089*** \\
- &  & (0.027) & (0.027) \\
-\multirow{2}{*}{Other Channel} & 0.084** &  &  \\
- & (0.038) &  &  \\
-\multirow{2}{*}{Price Idx} &  & -0.066** &  \\
- &  & (0.026) &  \\
-\multirow{2}{*}{Rule: Growth} & -0.330*** & -0.320*** & -0.336*** \\
- & (0.037) & (0.027) & (0.029) \\
-\multirow{2}{*}{Rule: Inert. Taylor} & -0.158*** & -0.162*** & -0.169*** \\
- & (0.037) & (0.027) & (0.029) \\
-\multirow{2}{*}{Sticky Prices (Other)} &  & -0.126*** &  \\
- &  & (0.038) &  \\
-\multirow{2}{*}{Sticky Price (Other) $\times$ Price Idx.} & -0.486*** &  & -0.216*** \\
- & (0.078) &  & (0.077) \\
-\multirow{2}{*}{Sticky Prices (Rotemberg)} & -0.112** &  &  \\
- & (0.053) &  &  \\
-\multirow{2}{*}{Sticky Wages} &  & 0.108*** & 0.062** \\
- &  & (0.024) & (0.027) \\
-\multirow{2}{*}{Late Vintage} &  &  & 0.070** \\
- &  &  & (0.028) \\
-\multirow{2}{*}{Wage Idx. (Mult. Price)} & 0.135*** & 0.078* & 0.093** \\
- & (0.046) & (0.042) & (0.045) \\
-\multirow{2}{*}{Wealth Channel} & -0.172*** &  & -0.095*** \\
- & (0.041) &  & (0.028) \\
+\multirow{2}{*}{Constant} & -0.153*** & -0.257*** \\
+ & (0.039) & (0.048) \\
+\multirow{2}{*}{Estimated} & 0.130*** & 0.180*** \\
+ & (0.027) & (0.036) \\
+\multirow{2}{*}{Net Worth Channel} &  & 0.111** \\
+ &  & (0.046) \\
+\multirow{2}{*}{Other Channel} & 0.121*** & 0.096** \\
+ & (0.034) & (0.048) \\
+\multirow{2}{*}{Rule: Growth} & -0.372*** & -0.354*** \\
+ & (0.032) & (0.036) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & -0.180*** & -0.165*** \\
+ & (0.032) & (0.036) \\
+\multirow{2}{*}{Sticky Prices (Calvo)} &  & 0.155*** \\
+ &  & (0.047) \\
+\multirow{2}{*}{Sticky Price (Calvo) $\times$ Price Idx.} &  & -0.085** \\
+ &  & (0.042) \\
+\multirow{2}{*}{Sticky Price (Other) $\times$ Price Idx.} & -0.563*** & -0.375*** \\
+ & (0.081) & (0.096) \\
+\multirow{2}{*}{Sticky Prices (Rotemberg)} & -0.112*** &  \\
+ & (0.038) &  \\
+\multirow{2}{*}{Late Vintage} & 0.061* &  \\
+ & (0.031) &  \\
+\multirow{2}{*}{Wealth Channel} & -0.182*** & -0.143*** \\
+ & (0.035) & (0.045) \\
 \hline
-Observations & 149 & 222 & 222 \\
-$R^2$ from Final Weights& 0.575 & 0.537 & 0.512 \\
+Observations & 222 & 222 \\
+$R^2$ from Final Weights& 0.577 & 0.499 \\
 \hline
 \end{tabular}
 }
@@ -83,39 +75,39 @@ $R^2$ from Final Weights& 0.575 & 0.537 & 0.512 \\
 \begin{table}[h!]
 \centering
 \resizebox{0.9\textwidth}{!}{%
-\begin{tabular}{lccc}
+\begin{tabular}{lcc}
 \hline
-\multicolumn{4}{l}{\textbf{Dependent Variable: Sacrifice Ratio}} \\
+\multicolumn{3}{l}{\textbf{Dependent Variable: Sacrifice Ratio}} \\
 \hline
-\textbf{{Horizon}} & 20 & 40 & 60 \\
+\textbf{{Horizon}} & 20 & 40 \\
 \hline
-\multirow{2}{*}{Constant} & 9.605*** & 13.554*** & 14.987*** \\
- & (1.285) & (1.976) & (2.648) \\
-\multirow{2}{*}{$\log($Num. of Eqs.$)$} & -1.770*** & -2.959*** & -3.345*** \\
- & (0.470) & (0.679) & (0.899) \\
-\multirow{2}{*}{Net Worth Channel} & 2.928*** & 3.136*** & 4.205*** \\
- & (0.719) & (0.975) & (1.289) \\
-\multirow{2}{*}{Other Channel} & -1.683** &  &  \\
- & (0.687) &  &  \\
-\multirow{2}{*}{Price Idx} &  & -3.488*** & -3.287** \\
- &  & (1.157) & (1.535) \\
-\multirow{2}{*}{Rule: Growth} & 2.812*** & 3.308*** & 3.491*** \\
- & (0.648) & (0.987) & (1.297) \\
-\multirow{2}{*}{Rule: Inert. Taylor} & 1.550** & 1.605 & 1.970 \\
- & (0.648) & (0.987) & (1.297) \\
-\multirow{2}{*}{Sticky Price (Calvo) $\times$ Price Idx.} & -3.497*** &  &  \\
- & (0.803) &  &  \\
-\multirow{2}{*}{Sticky Prices (Rotemberg)} & -5.099*** & -7.258*** & -8.375*** \\
- & (0.856) & (1.271) & (1.791) \\
-\multirow{2}{*}{Sticky Price (Rotemberg) $\times$ Price Idx.} & 358.428*** &  & 1430.265*** \\
- & (2.436) &  & (4.787) \\
-\multirow{2}{*}{Wage Idx.} & 2.771*** & 3.406*** & 4.325*** \\
- & (0.819) & (1.209) & (1.591) \\
-\multirow{2}{*}{Wealth Channel} &  & -2.541*** & -3.454*** \\
- &  & (0.982) & (1.291) \\
+\multirow{2}{*}{Constant} & 9.605*** & 13.554*** \\
+ & (1.285) & (1.976) \\
+\multirow{2}{*}{$\log($Num. of Eqs.$)$} & -1.770*** & -2.959*** \\
+ & (0.470) & (0.679) \\
+\multirow{2}{*}{Net Worth Channel} & 2.928*** & 3.136*** \\
+ & (0.719) & (0.975) \\
+\multirow{2}{*}{Other Channel} & -1.683** &  \\
+ & (0.687) &  \\
+\multirow{2}{*}{Price Idx} &  & -3.488*** \\
+ &  & (1.157) \\
+\multirow{2}{*}{Rule: Growth} & 2.812*** & 3.308*** \\
+ & (0.648) & (0.987) \\
+\multirow{2}{*}{Rule: Inert. Taylor} & 1.550** & 1.605 \\
+ & (0.648) & (0.987) \\
+\multirow{2}{*}{Sticky Price (Calvo) $\times$ Price Idx.} & -3.497*** &  \\
+ & (0.803) &  \\
+\multirow{2}{*}{Sticky Prices (Rotemberg)} & -5.099*** & -7.258*** \\
+ & (0.856) & (1.271) \\
+\multirow{2}{*}{Sticky Price (Rotemberg) $\times$ Price Idx.} & 358.428*** &  \\
+ & (2.436) &  \\
+\multirow{2}{*}{Wage Idx.} & 2.771*** & 3.406*** \\
+ & (0.819) & (1.209) \\
+\multirow{2}{*}{Wealth Channel} &  & -2.541*** \\
+ &  & (0.982) \\
 \hline
-Observations & 197 & 197 & 197 \\
-$R^2$ from Final Weights& 0.987 & 0.354 & 0.998 \\
+Observations & 197 & 197 \\
+$R^2$ from Final Weights& 0.987 & 0.354 \\
 \hline
 \end{tabular}
 }

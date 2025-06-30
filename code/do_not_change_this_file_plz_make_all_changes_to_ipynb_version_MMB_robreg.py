@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[95]:
 
 
 import os
@@ -18,7 +18,7 @@ from nbconvert import PythonExporter
 os.chdir('/Users/connorbrennan/OneDrive - The University of Chicago/mmb/data')
 
 
-# In[2]:
+# In[96]:
 
 
 df, meta = pyreadstat.read_dta('derived/MMB_reg_format.dta')
@@ -32,7 +32,7 @@ df_estimated = df.loc[df['estimated']==1]
 df_calibrated = df.loc[df['calibrated']==1]
 
 
-# In[3]:
+# In[ ]:
 
 
 # Stepwise regression parameters
@@ -40,6 +40,7 @@ alphas = {
     'enter': 0.075,
     'exit': 0.125
 }
+horizons = [20, 40]
 
 #alpha_enter, alpha_exit = 0.15, 0.15
 depvars = ['IScurve', 'infl_per_rr', 'sacratio']
@@ -81,7 +82,7 @@ indepvars_detailed = frictions_detailed + properties
 indepvars_simple = frictions_simple + properties
 
 
-# In[4]:
+# In[98]:
 
 
 def stepwise_reg(depvar, covariates, data, alphas):
@@ -180,7 +181,7 @@ def get_r2(orig_reg, depvar, data):
     return wls_reg.rsquared_adj
 
 
-# In[5]:
+# In[ ]:
 
 
 var_labels = {
@@ -389,17 +390,13 @@ def generate_latex_tables(stepwise_regs, r2_values, depvars, horizons, var_label
         print("\n\n")
 
 
-depvars = ['IScurve', 'infl_per_rr', 'sacratio']
-horizons = [20, 40, 60]
-
-
-# In[6]:
+# In[101]:
 
 
 stepwise_regs_smp = {}
 r2_values_smp = {}
 for depvar in depvars:
-    for horizon in [20, 40, 60]:
+    for horizon in horizons:
         stepwise_regs_smp[f'{depvar}{horizon}'] = stepwise_reg(f'{depvar}{horizon}', indepvars_simple, df, alphas)
         r2_values_smp[f'{depvar}{horizon}'] = get_r2(stepwise_regs_smp[f'{depvar}{horizon}'], f'{depvar}{horizon}', df)
         print(f'Completed simple stepwise regressions for {depvar}{horizon}!')
@@ -408,31 +405,31 @@ for depvar in depvars:
 stepwise_regs_dtd = {}
 r2_values_dtd = {}
 for depvar in depvars:
-    for horizon in [20, 40, 60]:
+    for horizon in horizons:
         stepwise_regs_dtd[f'{depvar}{horizon}'] = stepwise_reg(f'{depvar}{horizon}', indepvars_detailed, df, alphas)
         r2_values_dtd[f'{depvar}{horizon}'] = get_r2(stepwise_regs_dtd[f'{depvar}{horizon}'], f'{depvar}{horizon}', df)
         print(f'Completed detailed stepwise regressions for {depvar}{horizon}!')
 
 
-# In[7]:
+# In[ ]:
 
 
 generate_latex_tables(stepwise_regs_dtd, r2_values_dtd, depvars, horizons, var_labels, depvar_labels, '../output/stepwise_regressions/stepwise_together_detailed.txt')
 
 
-# In[8]:
+# In[ ]:
 
 
 generate_latex_tables(stepwise_regs_smp, r2_values_smp, depvars, horizons, var_labels, depvar_labels, '../output/stepwise_regressions/stepwise_together_simple.txt')
 
 
-# In[9]:
+# In[ ]:
 
 
 stepwise_regs_frics_smp = {}
 r2_values_frics_smp = {}
 for depvar in depvars:
-    for horizon in [20, 40, 60]:
+    for horizon in horizons:
         stepwise_regs_frics_smp[f'{depvar}{horizon}'] = stepwise_reg(f'{depvar}{horizon}', frictions_simple, df, alphas)
         r2_values_frics_smp[f'{depvar}{horizon}'] = get_r2(stepwise_regs_frics_smp[f'{depvar}{horizon}'], f'{depvar}{horizon}', df)
         print(f'Completed frictions simple stepwise regressions for {depvar}{horizon}!')
@@ -443,7 +440,7 @@ generate_latex_tables(stepwise_regs_frics_smp, r2_values_frics_smp, depvars, hor
 stepwise_regs_frics_dtd = {}
 r2_values_frics_dtd = {}
 for depvar in depvars:
-    for horizon in [20, 40, 60]:
+    for horizon in horizons:
         stepwise_regs_frics_dtd[f'{depvar}{horizon}'] = stepwise_reg(f'{depvar}{horizon}', frictions_detailed, df, alphas)
         r2_values_frics_dtd[f'{depvar}{horizon}'] = get_r2(stepwise_regs_frics_dtd[f'{depvar}{horizon}'], f'{depvar}{horizon}', df)
         print(f'Completed frictions detailed stepwise regressions for {depvar}{horizon}!')
@@ -451,13 +448,13 @@ for depvar in depvars:
 generate_latex_tables(stepwise_regs_frics_dtd, r2_values_frics_dtd, depvars, horizons, var_labels, depvar_labels, '../output/stepwise_regressions/stepwise_frictions_detailed.txt')
 
 
-# In[10]:
+# In[ ]:
 
 
 stepwise_regs_props_smp = {}
 r2_values_props_smp = {}
 for depvar in depvars:
-    for horizon in [20, 40, 60]:
+    for horizon in horizons:
         stepwise_regs_props_smp[f'{depvar}{horizon}'] = stepwise_reg(f'{depvar}{horizon}', properties, df, alphas)
         r2_values_props_smp[f'{depvar}{horizon}'] = get_r2(stepwise_regs_props_smp[f'{depvar}{horizon}'], f'{depvar}{horizon}', df)
         print(f'Completed properties stepwise regressions for {depvar}{horizon}!')
@@ -465,7 +462,7 @@ for depvar in depvars:
 generate_latex_tables(stepwise_regs_props_smp, r2_values_props_smp, depvars, horizons, var_labels, depvar_labels, '../output/stepwise_regressions/stepwise_properties.txt')
 
 
-# In[11]:
+# In[ ]:
 
 
 import nbformat
