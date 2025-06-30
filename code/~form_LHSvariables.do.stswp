@@ -55,15 +55,22 @@ gen flag_pi_wrongsign = 1 if (pi<0 & period==${qforgive}+1)
 //	Changing Signs
 ********************************************************************************
 *Integral of response up to first sign change of variable responding
-egen piq_cum${horizon} = sum(piq) if period<=$horizon & piq_chg_sign_sum<1, by(id)
-egen y_cum${horizon} = sum(y) if period<=$horizon & y_chg_sign_sum<1, by(id)
-egen irate_cum${horizon} = sum(irate) if period<=$horizon & irate_chg_sign_sum<1, by(id)
-egen rrate_cum${horizon} = sum(rrate) if period<=$horizon //& rrate_chg_sign_sum<1, by(id)
-egen pi_cum${horizon} = sum(pi) if period<=$horizon & pi_chg_sign_sum<1, by(id)
+//egen piq_cum${horizon} = sum(piq) if period<=$horizon 		& piq_chg_sign_sum<1, by(id)
+//egen y_cum${horizon} = sum(y) if period<=$horizon 			& y_chg_sign_sum<1, by(id)
+//egen irate_cum${horizon} = sum(irate) if period<=$horizon 	& irate_chg_sign_sum<1, by(id)
+//egen rrate_cum${horizon} = sum(rrate) if period<=$horizon 	& rrate_chg_sign_sum<1, by(id)
+//egen pi_cum${horizon} = sum(pi) if period<=$horizon 			& pi_chg_sign_sum<1, by(id)
+
+egen piq_cum${horizon} = sum(piq) if period<=$horizon 		, by(id)
+egen y_cum${horizon} = sum(y) if period<=$horizon 			, by(id)
+egen irate_cum${horizon} = sum(irate) if period<=$horizon 	, by(id)
+egen rrate_cum${horizon} = sum(rrate) if period<=$horizon 	, by(id)
+egen pi_cum${horizon} = sum(pi) if period<=$horizon 		, by(id)
 
 
 
 *Integral of response over integral of rrate over that same period
+/*
 egen rrate_piq_cum = sum(rrate) if period<=${horizon} & piq_chg_sign_sum<1, by(id)
 egen rrate_y_cum = sum(rrate) if period<=${horizon} & y_chg_sign_sum<1, by(id)
 egen rrate_pi_cum = sum(rrate) if period<=${horizon} & pi_chg_sign_sum<1, by(id)
@@ -72,7 +79,7 @@ gen piq_over_rrate_cum${horizon} = piq_cum${horizon} / rrate_piq_cum
 gen y_over_rrate_cum${horizon} = y_cum${horizon} / rrate_y_cum
 gen pi_over_rrate_cum${horizon} = pi_cum${horizon} / rrate_pi_cum
 drop rrate_piq_cum rrate_y_cum rrate_pi_cum
-
+*/
 
 
 ********************************************************************************
