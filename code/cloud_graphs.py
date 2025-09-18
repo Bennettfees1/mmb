@@ -10,7 +10,8 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-os.chdir('/msu/scratch5/m1bdf00/Bob/mmb/')
+#os.chdir('/msu/scratch5/m1bdf00/Bob/mmb/')
+os.chdir('/Users/connorbrennan/OneDrive - The University of Chicago/mmb/')
 
 graph_opts = {'SW_col': '--b',
               'VAR_col': '--k',
@@ -29,7 +30,19 @@ graph_opts = {'SW_col': '--b',
 
 df = pd.read_stata('./data/derived/MMB_IRF_format_full.dta')
 
-print(df)
+#drop ones with piq nad y timing max of 99
+timing = (
+    df.groupby(['model', 'rule'])
+        .apply(lambda g: pd.Series({
+            'y_timing_max':   g.loc[g['y'].idxmax(),   'period'],
+            'piq_timing_max': g.loc[g['piq'].idxmax(), 'period']
+        }))
+        .reset_index()
+)
+valid_groups = timing.query('y_timing_max != 99 and piq_timing_max != 99')[['model', 'rule']]
+df = df.merge(valid_groups, on=['model', 'rule'], how='inner')
+
+#print(df)
 
 
 variables = ['piq', 'y', 'irate', 'rrate']

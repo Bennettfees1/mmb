@@ -6,235 +6,11 @@ glo numbers = "one two three four five six seven eight nine ten eleven twelve th
 graph close
 use .${cleandata}MMB_reg_format.dta, clear
 
+drop if y_timing_max >= 99
+drop if piq_timing_max >= 99
 
-//Migrated this portion over to Python
-//! python3 .${code}/do_not_change_this_file_plz_make_all_changes_to_ipynb_version_MMB_robreg.py
-
-/* 
-********************************************************************************
-*** Outcome Dependent Variables
-********************************************************************************
-capture program drop step_reg
-program define step_reg
-	args depvar condition
-	
-	*Step 1: Variable to enter the regression
-	loc best_pval_in_step = 1
-	loc entering_var " "
-	foreach var of global pot_covariates{
-		capture noisily robreg m `depvar' `var' ${entered_vars} `condition', k(4.685) bis center updatescale
-		if _rc != 0{
-			continue
-		}
-		loc entrant_pval = r(table)[4,1]
-		if `entrant_pval'<$alpha_enter & `entrant_pval'<`best_pval_in_step'{
-			loc entering_var "`var'"
-		}
-	}
-	if "`entering_var'" == " "{
-		glo keep_stepping = 0
-	}
-	else{
-		glo entered_vars "${entered_vars} `entering_var'"
-		glo pot_covariates = subinword("$pot_covariates", "`entering_var'", "", 1)
-	}
-	
-	
-	*Step 2: Variables that should drop from regression
-	loc num_of_entered_vars = wordcount("$entered_vars")
-	loc final_var_to_test: word `num_of_entered_vars' of $entered_vars
-	glo still_checking = 1
-	while $still_checking {
-		foreach var of global entered_vars{
-			if "`var'" == "`final_var_to_test'"{
-				glo still_checking = 0
-			}
-			glo entered_except_for = subinword("$entered_vars", "`var'", "", 1)
-			capture noisily robreg m `depvar' `var' ${entered_except_for} `condition', k(4.685) bis center updatescale
-			if _rc != 0{
-				continue
-			}
-			loc interesting_pval = r(table)[4,1]
-			if `interesting_pval'>$alpha_exit | `interesting_pval' == .{
-				glo entered_vars = "$entered_except_for"
-				glo pot_covariates = "${pot_covariates} `var'"
-				continue, break
-			}
-		}
-	}
-
-	
-	glo reg_call = "robreg m `depvar' ${entered_vars} `condition', k(4.685) bis center updatescale"
-end
-
-
-glo depvars "IScurve infl_per_rr sacratio"
-
-foreach var of global depvars{
-	foreach type in "mod_Oth" "mod_All" "nonmod_All" "nonmod_Est"{
-		if "`type'" == "nonmod_Est"{
-			loc condition "if estimated"
-		}
-		else{
-			loc condition " "
-		}
-		forvalues i = 20(20)60{
-			glo keep_stepping = 1
-			glo entered_vars
-			glo pot_covariates "${indepvars_`type'}"
-			while $keep_stepping {
-				step_reg `var'`i' "`condition'"
-			}
-			glo reg_`var'`i'_`type' "$reg_call"
-		}
-	}
-}
-
-
-********************************************************************************
-********************************************************************************
-cls
-foreach depvar of global depvars{
-	foreach type in "mod_Oth" "mod_All" "nonmod_All" "nonmod_Est"{
-		log using ./output/stepwise_regressions/`depvar'_`type', replace
-			di "********************************************************************************"
-			di "Outcomes of bi-directional stepwise regressions "
-			di "with `depvar' across different horizons with rule fixed effects"
-			di "Independent Variable set: `type'"
-			di "********************************************************************************"
-			display _n "{newpage}"
-		forvalues i = 20(20)60{
-			di "********************************************************************************"
-			di "Dependent Variable: `depvar'`i'"
-			di "********************************************************************************", _newline(2)
-			${reg_`depvar'`i'_`type'}
-			display _n "{newpage}"
-		}
-		log close
-		translate ./output/stepwise_regressions/`depvar'_`type'.smcl ./output/stepwise_regressions/`depvar'_`type'.pdf, translator(smcl2pdf)
-		! rm ./output/stepwise_regressions/`depvar'_`type'.smcl
-	}
-}
-
-
-*Now put those results ready for Latex!
-glo resultsfile = "./output/stepwise_regressions/texresults_outcomevars_stepwise_output.txt"
-capture ! rm -r "${resultsfile}"
-
-loc j = 1
-
-foreach depvar of global depvars{
-	glo colnum: word `j' of ${numbers}
-	
-	loc h = 1
-
-	foreach type in "mod_All" "nonmod_All"{
-		glo tabnum: word `h' of ${numbers}
-				
-		${reg_`depvar'20_`type'}
-		loc k = 1
-		
-			//loop through potential covariates
-			foreach var of global indepvars_`type'{
-				glo rownum: word `k' of ${numbers}
-				
-				//reseting these globals to avoid mistakes
-				global vnum 
-				global se
-				global beta
-				global record_or_not
-				
-				//did that covariate get included? (set a switch for yes or no)
-				if strpos(e(cmdline), "`var'")!=0{
-					local indepvars = e(indepvars)
-					glo vnum: list posof "`var'" in indepvars
-					loc beta = round(r(table)[1, ${vnum}], 0.001)
-					
-					if `beta'==.{
-						glo record_or_not = 0
-					}
-					else{
-						glo record_or_not = 1
-					}
-				}
-				else{
-					glo record_or_not = 0
-				}
-				
-				
-				
-				if $record_or_not == 1 {
-					loc se = round(r(table)[2, ${vnum}], 0.001)
-					if `se' < 1 {
-						loc se = "0`se'" //put a 0 in front of the SE if less than 1
-					}
-					
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") result(`beta') append unitzero
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") string("(`se')") append unitzero
-					
-					//if the variable significant?
-					if r(table)[4, ${vnum}] < 0.01{
-						texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{***}) append 
-					}
-					else if r(table)[4, ${vnum}] < 0.05 {
-						texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{**}) append 
-					}
-					else if r(table)[4, ${vnum}] < 0.1 {
-						texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{*}) append 
-					}
-					else{
-						texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string() append 
-					}
-					
-				}
-				
-				//variable not included? Bummer, but let's add blanks for it
-				else{
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") result("") append unitzero
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") result("") append unitzero
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") result("") append unitzero
-				}
-				
-				loc k = `k'+1
-			}
-			
-			//constant
-			glo rownum: word `k' of ${numbers}
-			loc cons_pos = wordcount(e(indepvars)) + 1 //+1 for constant :)
-			loc beta = round(r(table)[1, `cons_pos'], 0.001)
-			loc se = round(r(table)[2, `cons_pos'], 0.001)
-			if `se' < 1 {
-				loc se = "0`se'" //put a 0 in front of the SE if less than 1
-			}
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") result(`beta') append unitzero
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") string("(`se')") append unitzero
-			
-			//is the constant significant?
-			if r(table)[4, `cons_pos'] < 0.01{
-				texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{***}) append 
-			}
-			else if r(table)[4, `cons_pos'] < 0.05 {
-				texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{**}) append 
-			}
-			else if r(table)[4, `cons_pos'] < 0.1 {
-				texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{*}) append 
-			}
-			else{
-				texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string() append 
-			}
-			
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}COLUMN${colnum}N") result(e(N)) append unitzero
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}COLUMN${colnum}rsq") result(e(r2_w)) append unitzero
-
-		loc h = `h'+1
-	}
-	
-	loc j = `j'+1
-}
-*/
-
-
-	
+gen not_wg_ndx = 1 - wg_ndx
+gen not_pr_ndx = 1 - pr_ndx
 	
 	
 
@@ -253,13 +29,17 @@ program define step_reg_nb
 	loc best_pval_in_step = 1
 	loc entering_var " "
 	foreach var of global pot_covariates{
-		capture noisily nbreg `depvar' `var' ${entered_vars}  if `depvar'<$time_limit `condition', vce(r)
+		//capture noisily nbreg `depvar' `var' ${entered_vars}  if `depvar'<$time_limit `condition', vce(r)
+		capture noisily poisson `depvar' rule_g rule_itr estimated `var' ${entered_vars} ///
+            if `depvar' < $time_limit `condition', vce(robust)
 		if _rc != 0{
 			continue
 		}
-		loc entrant_pval = r(table)[4,1]
-		if `entrant_pval'<$alpha_enter & `entrant_pval'<`best_pval_in_step'{
-			loc entering_var "`var'"
+		capture quietly testparm `var'
+		local entrant_pval = cond(_rc, ., r(p))
+		if (`entrant_pval' < $alpha_enter) & (`entrant_pval' < `best_pval_in_step') {
+			local best_pval_in_step `entrant_pval'
+			local entering_var "`var'"
 		}
 	}
 	if "`entering_var'" == " "{
@@ -273,59 +53,64 @@ program define step_reg_nb
 	
 	*Step 2: Variables that should drop from regression
 	loc num_of_entered_vars = wordcount("$entered_vars")
-	loc final_var_to_test: word `num_of_entered_vars' of $entered_vars
-	glo still_checking = 1
-	while $still_checking {
-		foreach var of global entered_vars{
-			if "`var'" == "`final_var_to_test'"{
-				glo still_checking = 0
-			}
-			glo entered_except_for = subinword("$entered_vars", "`var'", "", 1)
-			capture noisily nbreg `depvar' `var' ${entered_except_for}  if `depvar'<$time_limit `condition', vce(r)
-			if _rc != 0{
-				continue
-			}
-			loc interesting_pval = r(table)[4,1]
-			if `interesting_pval'>$alpha_exit | `interesting_pval' == .{
-				glo entered_vars = "$entered_except_for"
-				glo pot_covariates = "${pot_covariates} `var'"
-				continue, break
+	if (`num_of_entered_vars' > 0) {
+		loc final_var_to_test: word `num_of_entered_vars' of $entered_vars
+		glo still_checking = 1
+		while $still_checking {
+			foreach var of global entered_vars{
+				if "`var'" == "`final_var_to_test'"{
+					glo still_checking = 0
+				}
+				glo entered_except_for = subinword("$entered_vars", "`var'", "", 1)
+				capture noisily poisson `depvar' rule_g rule_itr estimated `var' ${entered_except_for} ///
+								if `depvar' < $time_limit `condition', vce(robust)			
+				if _rc != 0{
+					continue
+				}
+				capture quietly testparm `var'
+				local interesting_pval = cond(_rc, ., r(p))
+				if (`interesting_pval'>$alpha_exit) | (`interesting_pval' == .){
+					glo entered_vars = "$entered_except_for"
+					glo pot_covariates = "${pot_covariates} `var'"
+					continue, break
+				}
 			}
 		}
 	}
-
-	glo reg_call = "nbreg `depvar' `var' ${entered_vars}  if `depvar'<${time_limit} `condition', vce(r)"
+	
+	*Step 3: Wooldridge (1997) auxiliary regression for overdispersion
+    quietly poisson `depvar' rule_g rule_itr estimated ${entered_vars} if `depvar' < $time_limit `condition', vce(robust)
+	capture drop __mu __aux __mu2 __lin
+	predict double __lin, xb
+	gen double __mu = exp(__lin)
+	// ((y - mu)^2 - y) = alpha * mu^2 + error
+    gen double __aux = ((`depvar' - __mu)^2 - `depvar')
+    gen double __mu2 = __mu^2
+	// No-constant regression with robust SEs
+    quietly regress __aux __mu2 if `depvar' < $time_limit `condition', nocons vce(robust)
+    // Test H0: alpha = 0
+    test __mu2
+    local p_over = r(p)
+    local alpha_hat = _b[__mu2]
+	
+	*Step 4: Decide final reporting model and store call
+	if (`p_over' < 0.05) {
+        // Overdispersion: QMLE NegBin with GLM robust SEs (NB2 variance: mu + alpha*mu^2)
+        // We *estimate* alpha via GLM; robust SEs make it QMLE-robust to variance misspecification.
+        global reg_call = "glm `depvar' rule_g rule_itr estimated ${entered_vars} if `depvar' < ${time_limit} `condition', family(nbinomial) link(log) vce(robust) nolog"
+    }
+    else {
+        // No overdispersion: stick with robust Poisson
+        global reg_call = "poisson `depvar' rule_g rule_itr estimated ${entered_vars} if `depvar' < ${time_limit} `condition', vce(robust) nolog"
+    }
 end
 
 
-/*
-glo time_limit = 60
+glo time_limit = 99
 //glo depvars "piq_timing_max y_timing_max rrate_timing_min irate_timing_min"
 glo depvars "y_timing_max piq_timing_max"
 foreach var of global depvars{
-	foreach type in "mod_Oth" "mod_All" "nonmod_All" "nonmod_Est"{
-		if "`type'" == "nonmod_Est"{
-			loc condition "& estimated"
-		}
-		else{
-			loc condition " "
-		}
-		glo keep_stepping = 1
-		glo entered_vars
-		glo pot_covariates "${indepvars_`type'}"
-		while $keep_stepping {
-			step_reg_nb `var'
-		}
-		glo reg_`var'_`type' "$reg_call"
-		}
-}
-*/
-
-glo time_limit = 60
-//glo depvars "piq_timing_max y_timing_max rrate_timing_min irate_timing_min"
-glo depvars "y_timing_max piq_timing_max"
-foreach var of global depvars{
-	foreach type in "all_sim" "all_det" "frics_det" "frics_sim" "properties" {
+	foreach type in "nomrig" "realrig" "nonmod" "all" "nomrig_all" "realrig_all" "nonmod_all" "all_all" {
 		loc condition " "
 		glo keep_stepping = 1
 		glo entered_vars
@@ -342,139 +127,156 @@ foreach var of global depvars{
 ********************************************************************************
 ********************************************************************************
 cls
-foreach depvar of global depvars{
-	//foreach type in "mod_Oth" "mod_All" "nonmod_All" "nonmod_Est"{
-	foreach type in "all_sim" "all_det" "frics_det" "frics_sim" "properties" {
+foreach depvar of global depvars {
+	foreach type in "nomrig" "realrig" "nonmod" "all" "nomrig_all" "realrig_all" "nonmod_all" "all_all" {
 		log using ./output/stepwise_regressions/`depvar'_`type', replace
 		capture ! rm ./output/stepwise_regressions/`depvar'_`type'.pdf
 		di "********************************************************************************"
-		di "Outcomes of bi-directional stepwise regressions with `depvar' with rule fixed effects"
-		di "Independent Variable set: `type'"
+		di "Outcomes of bi-directional stepwise regressions with `depvar' (type = `type')"
 		di "********************************************************************************"
 		${reg_`depvar'_`type'}
 		log close
-		translate ./output/stepwise_regressions/`depvar'_`type'.smcl ./output/stepwise_regressions/`depvar'_`type'.pdf, translator(smcl2pdf)
-		! rm ./output/stepwise_regressions/`depvar'_`type'.smcl
+		capture noisily translate ./output/stepwise_regressions/`depvar'_`type'.smcl ///
+			./output/stepwise_regressions/`depvar'_`type'.pdf, translator(smcl2pdf)
+		capture noisily ! rm ./output/stepwise_regressions/`depvar'_`type'.smcl
 		di "********************************************************************************"
 	}
 }
 
 
 
-*Now put those results ready for Latex!
-//appending to the results file; no need to restart local j either because these are just new columns in the same tables
-foreach depvar of global depvars{
-	loc j = 1 
-	glo colnum: word `j' of ${numbers}
+********************************************************************************
+* LaTeX export: one file per TYPE; columns = the two DVs
+********************************************************************************
+
+* Name your two dependent variables (exactly the two in $depvars, in your desired column order)
+local dep1 y_timing_max
+local dep2 piq_timing_max
+
+* Column titles
+local mtitles `" "Output timing (max)" "Inflation timing (max)" "'
+
+* If you want to restrict what appears (use wildcards):
+* - This does NOT force blank cells; it shows only estimated coefs.
+* - If you want forced rows with blanks, say so and I'll swap in an order() list with explicit factor levels.
+local keep_list "stky_* pr_ndx wg_ndx *#* bnkcrdit ntwrth wlth open learning cb_authors_ext ln_neq vint_* est_* _cons"
+
+* Optional pretty labels (extend as needed)
+local coflbl ///
+    /* intercept & rules */ ///
+    _cons                       "Constant" ///
+    rule_g                      "Rule: Growth" ///
+    rule_itr                    "Rule: Inert. Taylor" ///
+    /* legacy sticky-price flavors (if present) */ ///
+    stky_pr_calvo               "Sticky Prices (Calvo)" ///
+    stky_pr_rotemberg           "Sticky Prices (Rotemberg)" ///
+    stky_pr_other               "Sticky Prices (Other)" ///
+    /* nominal rigids (main effects) */ ///
+    stky_pr                     "Sticky Prices" ///
+    stky_wg                     "Sticky Wages" ///
+    pr_ndx                      "Price Idx" ///
+    wg_ndx                      "Wage Idx." ///
+    wg_ndx_prprice              "Wage Idx. (Prev. Price)" ///
+    wg_ndx_mult                 "Wage Idx. (Mult. Price)" ///
+    wg_ndx_other                "Wage Idx. (Other)" ///
+    /* nomrig interactions: generic (your current i.var#i.var usage) */ ///
+    1.stky_pr#1.pr_ndx          "Sticky Prices $\\times$ Price Idx." ///
+    1.stky_wg#1.wg_ndx          "Sticky Wages $\\times$ Wage Idx." ///
+    1.stky_pr#1.not_pr_ndx      "Sticky Prices $\\times$ Not Price Idx." ///
+    1.stky_wg#1.not_wg_ndx      "Sticky Wages $\\times$ Not Wage Idx." ///
+    1.stky_pr#1.wg_ndx          "Sticky Prices $\\times$ Wage Idx." ///
+    1.stky_wg#1.pr_ndx          "Sticky Wages $\\times$ Price Idx." ///
+    1.stky_pr#1.not_wg_ndx      "Sticky Prices $\\times$ Not Wage Idx." ///
+    1.stky_wg#1.not_pr_ndx      "Sticky Wages $\\times$ Not Price Idx." ///
+    /* nomrig interactions: legacy flavors (if you ever include these) */ ///
+    1.stky_pr_calvo#1.pr_ndx        "Sticky Price (Calvo) $\\times$ Price Idx." ///
+    1.stky_pr_rotemberg#1.pr_ndx    "Sticky Price (Rotemberg) $\\times$ Price Idx." ///
+    1.stky_pr_other#1.pr_ndx        "Sticky Price (Other) $\\times$ Price Idx." ///
+    1.stky_wg#1.wg_ndx_prprice      "Sticky Wages $\\times$ Wage Idx. (Prev. Price)" ///
+    1.stky_wg#1.wg_ndx_mult         "Sticky Wages $\\times$ Wage Idx. (Mult. Price)" ///
+    1.stky_wg#1.wg_ndx_other        "Sticky Wages $\\times$ Wage Idx. (Other)" ///
+    /* real rigidities (main effects) */ ///
+    wlth                        "Wealth Channel" ///
+    ntwrth                      "Net Worth Channel" ///
+    bnkcrdit                    "Bank Credit Channel" ///
+    open                        "Open Economy" ///
+    learning                    "Learning Channel" ///
+    /* real rigidities interactions (as dummies; if continuous, switch to c.var#c.var) */ ///
+    1.wlth#1.ntwrth             "Wealth $\\times$ Net Worth" ///
+    1.wlth#1.bnkcrdit           "Wealth $\\times$ Bank Credit" ///
+    1.wlth#1.open               "Wealth $\\times$ Open Economy" ///
+    1.wlth#1.learning           "Wealth $\\times$ Learning" ///
+    1.ntwrth#1.bnkcrdit         "Net Worth $\\times$ Bank Credit" ///
+    1.ntwrth#1.open             "Net Worth $\\times$ Open Economy" ///
+    1.ntwrth#1.learning         "Net Worth $\\times$ Learning" ///
+    1.bnkcrdit#1.open           "Bank Credit $\\times$ Open Economy" ///
+    1.bnkcrdit#1.learning       "Bank Credit $\\times$ Learning" ///
+    1.open#1.learning           "Open Economy $\\times$ Learning" ///
+    /* non-modeling vars (main effects) */ ///
+    estimated                   "Estimated" ///
+    est_early                   "Early Data" ///
+    est_late                    "Late Data" ///
+    vint_early                  "Early Vintage" ///
+    vint_mid                    "Mid Vintage" ///
+    vint_late                   "Late Vintage" ///
+    cb_authors_ext              "Central Bank Author" ///
+    ln_neq                      "$\\log(\\text{Num. of Eqs.})$" ///
+    /* nonmod interactions (as dummies) */ ///
+    1.cb_authors_ext#1.estimated        "Central Bank Author $\\times$ Estimated" ///
+    1.cb_authors_ext#1.ln_neq           "Central Bank Author $\\times$ $\\log(\\text{Num. of Eqs.})$" ///
+    1.cb_authors_ext#1.vint_early       "Central Bank Author $\\times$ Early Vintage" ///
+    1.cb_authors_ext#1.vint_mid         "Central Bank Author $\\times$ Mid Vintage" ///
+    1.cb_authors_ext#1.vint_late        "Central Bank Author $\\times$ Late Vintage" ///
+    1.cb_authors_ext#1.est_early        "Central Bank Author $\\times$ Early Data" ///
+    1.cb_authors_ext#1.est_late         "Central Bank Author $\\times$ Late Data" ///
+    1.estimated#1.ln_neq                "Estimated $\\times$ $\\log(\\text{Num. of Eqs.})$" ///
+    1.estimated#1.vint_early            "Estimated $\\times$ Early Vintage" ///
+    1.estimated#1.vint_mid              "Estimated $\\times$ Mid Vintage" ///
+    1.estimated#1.vint_late             "Estimated $\\times$ Late Vintage" ///
+    1.estimated#1.est_early             "Estimated $\\times$ Early Data" ///
+    1.estimated#1.est_late              "Estimated $\\times$ Late Data" ///
+    1.ln_neq#1.vint_early               "$\\log(\\text{Num. of Eqs.})$ $\\times$ Early Vintage" ///
+    1.ln_neq#1.vint_mid                 "$\\log(\\text{Num. of Eqs.})$ $\\times$ Mid Vintage" ///
+    1.ln_neq#1.vint_late                "$\\log(\\text{Num. of Eqs.})$ $\\times$ Late Vintage" ///
+    1.ln_neq#1.est_early                "$\\log(\\text{Num. of Eqs.})$ $\\times$ Early Data" ///
+    1.ln_neq#1.est_late                 "$\\log(\\text{Num. of Eqs.})$ $\\times$ Late Data" ///
+    1.vint_early#1.est_early            "Early Vintage $\\times$ Early Data" ///
+    1.vint_early#1.est_late             "Early Vintage $\\times$ Late Data" ///
+    1.vint_mid#1.est_early              "Mid Vintage $\\times$ Early Data" ///
+    1.vint_mid#1.est_late               "Mid Vintage $\\times$ Late Data" ///
+    1.vint_late#1.est_early             "Late Vintage $\\times$ Early Data" ///
+    1.vint_late#1.est_late              "Late Vintage $\\times$ Late Data"
+* -------- end replacement block --------
+
+* Emit one LaTeX fragment per TYPE
+local dep1 : word 1 of $depvars
+local dep2 : word 2 of $depvars
+
+local mtitles `" "`dep1'" "`dep2'" "'
+
+
+foreach type in "nomrig" "realrig" "nonmod" "all" "nomrig_all" "realrig_all" "nonmod_all" "all_all" {
+    eststo clear
+
+    * run the already-stored final calls as columns
+    ${reg_`dep1'_`type'}
+    eststo `dep1'
+    estadd scalar N = e(N), replace
+    capture noisily estadd scalar r2 = e(r2_p), replace
+
+    ${reg_`dep2'_`type'}
+    eststo `dep2'
+    estadd scalar N = e(N), replace
+    capture noisily estadd scalar r2 = e(r2_p), replace
 	
-	loc h = 1
-
-	//foreach type in "mod_All" "nonmod_All"{
-	foreach type in "all_sim" "all_det" "frics_det" "frics_sim" "properties" {
-		glo tabnum: word `h' of ${numbers}
-				
-		${reg_`depvar'_`type'}
-		loc k = 1
-		
-			//loop through potential covariates
-			foreach var of global indepvars_`type'{				
-				glo rownum: word `k' of ${numbers}
-				
-				//reseting these globals to avoid mistakes
-				global vnum 
-				global se
-				global beta
-				global record_or_not
-				
-				//did that covariate get included? (set a switch for yes or no)	
-				
-				if strpos(e(cmdline), "`var'")!=0{
-					local indepvars = e(cmdline)
-					glo vnum: list posof "`var'" in indepvars
-					glo vnum = $vnum - 2
-					loc se = round(r(table)[2, ${vnum}], 0.001)	//gives beta as 0 but se as . so have to adapt
-					
-					if `se'==.{
-						glo record_or_not = 0
-					}
-					else{
-						glo record_or_not = 1
-					}
-				}
-				else{
-					glo record_or_not = 0
-				}	
-				
-				if $record_or_not == 1 {
-					loc beta = round(r(table)[1, ${vnum}], 0.001)
-					if `se' < 1 {
-						loc se = "0`se'" //put a 0 in front of the SE if less than 1
-					}
-					loc beta = string(`beta')
-					
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") string(`beta') append unitzero
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") string("(`se')") append unitzero
-					
-					//is the variable significant?
-					if r(table)[4, ${vnum}] < 0.01{
-						texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{***}) append 
-					}
-					else if r(table)[4, ${vnum}] < 0.05 {
-						texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{**}) append 
-					}
-					else if r(table)[4, ${vnum}] < 0.1 {
-						texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{*}) append 
-					}
-					else{
-						texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string() append 
-					}
-					
-				}
-				
-				//variable not included? Bummer, but let's add blanks for it
-				else{
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") result("") append unitzero
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") result("") append unitzero
-					texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") result("") append unitzero
-				}				
-				
-				loc k = `k'+1
-			}
-			
-			//constant
-			glo rownum: word `k' of ${numbers}
-			loc cons_pos = wordcount(e(cmdline)) - 2 - 3 //-2 for "nbreg yvar", -3 for end
-			loc beta = round(r(table)[1, `cons_pos'], 0.001)
-			loc se = round(r(table)[2, `cons_pos'], 0.001)
-			if `se' < 1 {
-				loc se = "0`se'" //put a 0 in front of the SE if less than 1
-			}
-			loc beta = string(`beta')
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}beta") string(`beta') append unitzero
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}se") string("(`se')") append unitzero
-			
-			//is the constant significant?
-			if r(table)[4, `cons_pos'] < 0.01{
-				texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{***}) append 
-			}
-			else if r(table)[4, `cons_pos'] < 0.05 {
-				texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{**}) append 
-			}
-			else if r(table)[4, `cons_pos'] < 0.1 {
-				texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string(^{*}) append 
-			}
-			else{
-				texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}ROW${rownum}COLUMN${colnum}star") string() append 
-			}
-			
-			loc N = string(e(N))
-			loc r2 = string(e(r2_p), "%9.3f")
-
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}COLUMN${colnum}N") string(`N') append unitzero
-			texresults using "${resultsfile}", texmacro("stepwiseT${tabnum}COLUMN${colnum}rsq") string(`r2')  append unitzero
-
-		loc h = `h'+1
-	}
-	
-	loc j = `j'+1
+	esttab `dep1' `dep2' ///
+		using "./output/stepwise_regressions/`type'_timing.txt", replace fragment booktabs ///
+		b(3) se(3) star(* 0.10 ** 0.05 *** 0.01) ///
+		mtitles(`mtitles') label nonotes alignment(c) ///
+		coeflabels(`coflbl') ///
+		stats(N r2, labels("Observations" "Pseudo \$R^2\$")) ///
+		gaps ///
+		interaction(" $\times$ ") ///
+		refcat(, nolabel) ///
+		nobaselevels noomitted nonotes
 }
