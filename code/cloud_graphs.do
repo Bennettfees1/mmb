@@ -1,51 +1,68 @@
 ********************************************************************************
 //	GET BOB's CEE VAR IRFs
 ********************************************************************************
-set graphics off
-import delimited .${rawdata}stationaryvardata.csv, clear varnames(1)
-foreach var of varlist xgap_cbo-pigdp{
-	replace `var' = "." if `var' == "NA"
-	destring `var', replace
-}
-gen date_temp = date(_date_, "YMD")
-format date_temp %td
-gen qdate = qofd(date_temp)
-format qdate %tq
-tsset qdate
-gen ln_pcom = ln(pcom)
-gen d_ln_pcom = D.ln_pcom
-
-var xgap_cbo pigdp d_ln_pcom rff if inrange(qdate, quarterly("1965q1", "YQ"), quarterly("2007q4", "YQ")), lags(1/4)
-irf create Bob_order, step(40) set(VAR_results, replace) order(xgap_cbo pigdp d_ln_pcom rff)
-foreach var of varlist xgap_cbo pigdp d_ln_pcom rff{
-	irf graph oirf, impulse(rff) response(`var') name(`var', replace)
-}
-graph combine xgap_cbo pigdp d_ln_pcom rff, name(VAR_irfs, replace)
-irf table irf, impulse(rff)
-use VAR_results.irf, clear
-keep if impulse == "rff"
-sort response step
-order response, first
-keep response step oirf
-reshape wide oirf, i(step) j(response, string)
-ren oirfrff irate
-ren oirfxgap_cbo y
-ren oirfpigdp piq
-ren step period
-scalar scale_up = 1/irate[1]
-foreach var of varlist irate y piq{
-	replace `var' = `var' * scale_up
-}
+import delimited .${rawdata}Bob_IRFS_63Q1_07Q4.csv, clear varnames(1)
+gen model = "VAR, 1963:Q1-2007:Q4"
+gen rule = "NA"
+ren pi piq
+ren rtb irate
+gen period = _n - 1
+order period model rule, first
 gen rrate = .
 replace rrate = irate - piq[_n+1]
-foreach var of varlist irate y piq rrate{
+foreach var of varlist irate piq y rrate{
 	replace `var' = (-1)*`var'
 }
-gen model = "VAR, 1965:Q1-2007:Q4"
-gen rule = "NA"
 tempfile a
 save `a', replace
-set graphics on
+
+
+
+// set graphics off
+// import delimited .${rawdata}stationaryvardata.csv, clear varnames(1)
+// foreach var of varlist xgap_cbo-pigdp{
+// 	replace `var' = "." if `var' == "NA"
+// 	destring `var', replace
+// }
+// gen date_temp = date(_date_, "YMD")
+// format date_temp %td
+// gen qdate = qofd(date_temp)
+// format qdate %tq
+// tsset qdate
+// gen ln_pcom = ln(pcom)
+// gen d_ln_pcom = D.ln_pcom
+//
+// var xgap_cbo pigdp d_ln_pcom rff if inrange(qdate, quarterly("1965q1", "YQ"), quarterly("2007q4", "YQ")), lags(1/4)
+// irf create Bob_order, step(40) set(VAR_results, replace) order(xgap_cbo pigdp d_ln_pcom rff)
+// foreach var of varlist xgap_cbo pigdp d_ln_pcom rff{
+// 	irf graph oirf, impulse(rff) response(`var') name(`var', replace)
+// }
+// graph combine xgap_cbo pigdp d_ln_pcom rff, name(VAR_irfs, replace)
+// irf table irf, impulse(rff)
+// use VAR_results.irf, clear
+// keep if impulse == "rff"
+// sort response step
+// order response, first
+// keep response step oirf
+// reshape wide oirf, i(step) j(response, string)
+// ren oirfrff irate
+// ren oirfxgap_cbo y
+// ren oirfpigdp piq
+// ren step period
+// scalar scale_up = 1/irate[1]
+// foreach var of varlist irate y piq{
+// 	replace `var' = `var' * scale_up
+// }
+// gen rrate = .
+// replace rrate = irate - piq[_n+1]
+// foreach var of varlist irate y piq rrate{
+// 	replace `var' = (-1)*`var'
+// }
+// gen model = "VAR, 1965:Q1-2007:Q4"
+// gen rule = "NA"
+// tempfile a
+// save `a', replace
+// set graphics on
 
 
 
@@ -62,7 +79,7 @@ replace period = period-1
 glo variables =  `" "piq" "y" "irate" "'  
 xtset id period
 loc title_size = "medsmall"
-loc extent = 12
+loc extent = 20
 merge m:1 model using ".${cleandata}rhs.dta"
 gen model_type_n = 1 if calibrated==1
 replace model_type_n = 2 if estimated==1
@@ -90,7 +107,7 @@ preserve
 	keep if (model=="US_SW07" & rule == "Inertial_Taylor") | (model=="VAR, 1965:Q1 to 2007:Q4")
 	foreach var in $variables {
 		gen `var'_SW = `var' if model=="US_SW07"
-		gen `var'_VAR = `var' if model=="VAR, 1965:Q1 to 2007:Q4"
+		gen `var'_VAR = `var' if model=="VAR, 1963:Q1 to 2007:Q4"
 	}
 	collapse (mean) *_SW *_VAR, by(period)
 	tempfile b

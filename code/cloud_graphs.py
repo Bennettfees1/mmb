@@ -27,6 +27,8 @@ graph_opts = {'SW_col': '--b',
               'tick_size': 20,
               'font': 'sans-seif'}
 
+var_vintage = 'VAR, 1963:Q1-2007:Q4'
+
 
 df = pd.read_stata('./data/derived/MMB_IRF_format_full.dta')
 
@@ -57,7 +59,7 @@ modtypes_subtitles = ['Estimated Models', 'Calibrated Models']
 
 bounds = [(1, -0.25),
           (1.75, -0.25),
-          (1, -1),
+          (1, -1.1),
           (0.5, -1.5)]
 
 
@@ -79,11 +81,11 @@ def make_cloud_graph(df, var, graph_opts, title, subtitle):
                     linewidth = graph_opts['highlighted_thickness'], 
                     label = "Smets & Wouters (2007)\nunder Inertial Taylor Rule",
                     zorder = len(df_g)-2)
-        elif group.model.reset_index(drop=True)[0] == "VAR, 1965:Q1-2007:Q4":
+        elif group.model.reset_index(drop=True)[0] == var_vintage:
             ax.plot(group.period, group[var],
                     graph_opts['VAR_col'],
                     linewidth = graph_opts['highlighted_thickness'], 
-                    label = "VAR, 1965:Q1-2007:Q4",
+                    label = var_vintage,
                     zorder = len(df_g)-1)
         elif group.calibrated.reset_index(drop=True)[0] == True:
             ax.plot(group.period, group[var], 
@@ -119,7 +121,7 @@ def make_cloud_graph(df, var, graph_opts, title, subtitle):
     
 
 for var, title, bound in zip(variables, titles, bounds):
-    df_for_med = df.loc[df.model != "VAR, 1965:Q1-2007:Q4"]
+    df_for_med = df.loc[df.model != var_vintage]
     df['median'] = df_for_med.groupby('period')[var].transform('median')
     
     variable_graph = make_cloud_graph(df, var, graph_opts, 
@@ -128,7 +130,7 @@ for var, title, bound in zip(variables, titles, bounds):
     for rule, subtitle in zip(rules, rules_subtitles):
         df_rule = df.loc[(df.rule==rule) 
                          | ((df.model=='US_SW07') & (df.rule=='Inertial_Taylor')) 
-                         | (df.model=='VAR, 1965:Q1-2007:Q4')]
+                         | (df.model==var_vintage)]
         df_for_med = df.loc[(df.rule==rule)]
         df_rule['median'] = df_for_med.groupby('period')[var].transform('median')
         rule_graph = make_cloud_graph(df_rule, var, graph_opts, 
@@ -137,7 +139,7 @@ for var, title, bound in zip(variables, titles, bounds):
     for modtype, subtitle in zip(modtypes, modtypes_subtitles):
         df_rule = df.loc[(df[modtype]==1) 
                          | ((df.model=='US_SW07') & (df.rule=='Inertial_Taylor')) 
-                         | (df.model=='VAR, 1965:Q1-2007:Q4')]
+                         | (df.model==var_vintage)]
         df_for_med = df.loc[(df[modtype]==1)]
         df_rule['median'] = df_for_med.groupby('period')[var].transform('median')
         modtype_graph = make_cloud_graph(df_rule, var, graph_opts, 
@@ -147,7 +149,7 @@ for var, title, bound in zip(variables, titles, bounds):
         for rule, subtitle_r in zip(rules, rules_subtitles):
             df_rule_modtype = df.loc[(df.rule==rule) & (df[modtype]==1) 
                              | ((df.model=='US_SW07') & (df.rule=='Inertial_Taylor')) 
-                             | (df.model=='VAR, 1965:Q1-2007:Q4')]
+                             | (df.model==var_vintage)]
             df_for_med = df.loc[(df.rule==rule) & (df[modtype]==1)]
             df_rule_modtype['median'] = df_for_med.groupby('period')[var].transform('median')
             dual_subtitle = f'{subtitle_m} under {subtitle_r}'
